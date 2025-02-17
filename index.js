@@ -1,7 +1,7 @@
 const express = require('express'); // getting express from our node_molues
 const path = require('path');
 const app = express(); // calling our express function here
-const mysql = require('mysql'); // getting mysql from node_molues
+const mysql = require('mysql2'); // getting mysql from node_molues
 const dotenv = require('dotenv'); // getting dotenv from node_modules
 const cookieParser = require('cookie-parser');
 const hbs = require('hbs');
