@@ -1,0 +1,71 @@
+        <div class="print" id="print" >
+  
+	<header class="clearfix">
+				
+					
+					<div style="align-content: center;
+    text-align: center;">
+					<h6>"ЛИДЕР ДЕЙ 2003" ЕООД
+    </h6>
+    <p  style=" border-bottom: 1px solid black;margin: 0;"> 
+        <i class="ri-mail-line"></i> 5500 гр. Ловеч, бул. "България" №1, <i class="ri-phone-line"></i> +359 890 915 060
+    </p>
+    <p  style="padding: 0;">
+        Обект за производство на готови за кансумация кулинарни изделия - рег.№ 11070023
+    </p>
+     <p  style="
+    padding-bottom: 5px;"> 
+        <i class="ri-mail-line"></i> 5500 гр. Ловеч, ж.к. "Здравец" - център
+    </p>
+    </div>
+    
+					
+			</header>
+
+	<section>
+		<div class="details clearfix">
+				<div class="title">Работна карта</div>
+				<div class="subtitle">
+				
+					{{date}}
+				</div>
+		</div>
+		<div class="container">
+			<div class="table-wrapper">
+				<table>
+					<tbody class="head">
+						<tr>
+							<th class="desc"><div>Произведен продукт</div></th>
+							<th class="total"><div>Партида</div></th>
+							<th class="qty"><div>Брой</div></th>
+						</tr>
+					</tbody>
+					<tbody class="body">
+					    {{#each task}}
+						<tr>
+							<td class="desc">{{this.name}}</td>
+							<td class="total">{{this.batch_num}}</td>
+							<td class="qty">{{this.quantity}}</td>
+						</tr>
+						{{/each}}
+						<tr class="grand-total">
+							<td class="desc">ОБЩО КОЛИЧЕСТВО</td>
+							<td class="unit" colspan ="2">{{sum_quant task}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</section>
+
+	<footer>
+		<div class="container">
+			<div class="notice">
+				<div><i class="ri-map-pin-2-fill"></i>5500 гр.Ловеч,  бул. "България" №1 </div>
+				<div><i class="ri-phone-fill"></i> +359 890 915 060 </div>
+			</div>
+		</div>
+	</footer>
+
+        </div>
+  

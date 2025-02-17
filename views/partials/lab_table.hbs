@@ -1,0 +1,103 @@
+<table id="myTable" class="table table-striped table-hover" style="width: 100% !important;">
+    <thead>
+        <tr>
+             <th><input type="checkbox" name="select_all" value="1" id="example-select-all"></th>
+             <th class="date">Дата</th>
+            <th class="name truncate">Поле</th>
+            <th> Фирма</th>
+             <th> Култура</th>
+              <th> Брой трет.</th>
+              <th> Брой капс.</th>
+               <th> Пр</th>
+            <th> Статус</th>
+            <th></th>
+        </tr>
+              <tr>
+             <th></th>
+            <th></th>
+             <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+             <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+        <tr>
+            <th></th>
+            <th>Сума избрани</th>
+            <th></th>
+            <th></th>
+             <th></th>
+             <th></th>
+<th id="whiteSum">0</th>
+             <th></th>
+             <th></th>
+            <th><ul class="utilities list-inline">
+                    <li style="padding-left: 10px;">
+                            <button class="btn btn-primary" id="confirmAll" type="submit" id="order" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Приеми избрани"><i class="ri-list-unordered"></i></button>
+                       
+                    </li>
+                        <li style="padding-left: 10px;">
+                         
+                            <button class="btn btn-success" id="finishAll"  type="submit" id="task" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Завърши избрани"><i class="ri-task-line"></i></button>
+                    </li>
+                </ul></th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each tasks}}
+        <tr id="{{this.id}}" disabled>
+            <td> <input type="checkbox" name="id[]"></td>
+            <td class="td-data">{{this.date}}</td>
+            <td class="td-data" id={{this.id_field}}>{{this.idntfr}}</td>
+            <td class="td-data" id={{this.task_id}}>{{this.name}}</td>
+            <td class="td-data">{{this.crop}}</td>
+            <td class="td-data">{{this.treatNum}}</td>
+            <td class="td-data">{{this.area}}0</td>
+          <td class="td-data">{{{priorityConvert this.priority}}}</td>
+            <td class="td-data">{{{statusLabConvert this.status}}}</td>
+            <td class="td-data">
+                <ul class="utilities list-inline">
+                    <li style="padding-left: 10px;">
+                         <form action="/confirmTaskLab" method="post">
+                            <button class="btn btn-primary" type="submit" onclick="myFunction(event)" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Приеми заявка"{{#if status}}
+                             disabled
+                             {{/if}}><i class="ri-list-unordered"></i></button>
+                        </form>
+                    </li>
+                        <li style="padding-left: 10px;">
+                         <span onclick="finishTask()"  data-bs-toggle="modal">
+                            <button class="btn btn-success" type="submit"  data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Завърши изпълнение" {{#if (checkFinished status)}}
+                             disabled
+                             {{/if}}><i class="ri-task-line"></i></button>
+                        </span>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+     <tfoot>
+        
+    </tfoot>
+</table>
+<script>
+    function myFunction(e) {
+        if (!confirm('Сигурни ли сте че искате да потвърдите заявката?')) {
+            e.preventDefault();
+        }
+        var taskId = event.target.parentNode.closest('tr').cells[3].id;
+        var orderId = event.target.parentNode.closest('tr').id;
+        console.log(taskId);
+        console.log(orderId);
+        $.post("/confirmTaskLab", {orderId:orderId,
+            taskId: taskId
+        },function (data) {
+            console.log(data);
+            console.log(e);
+            //e.parentNode.parentNode.rowIndex.html(data);
+        });
+         }
+</script>

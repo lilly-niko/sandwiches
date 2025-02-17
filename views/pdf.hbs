@@ -1,0 +1,143 @@
+
+		<div class="print">
+	<header class="clearfix">
+				
+					
+					<div style="align-content: center;
+    text-align: center;">
+					<h6>"ЛИДЕР ДЕЙ 2003" ЕООД
+    </h6>
+    <p  style=" border-bottom: 1px solid black;margin: 0;"> 
+        <i class="ri-mail-line"></i> 5500 гр. Ловеч, бул. "България" №1, <i class="ri-phone-line"></i> +359 890 915 060
+    </p>
+    <p  style="padding: 0;">
+        Обект за производство на готови за кансумация кулинарни изделия - рег.№ 11070023
+    </p>
+     <p  style="
+    padding-bottom: 5px;"> 
+        <i class="ri-mail-line"></i> 5500 гр. Ловеч, ж.к. "Здравец" - център
+    </p>
+    </div>
+    
+					
+			</header>
+			
+	<section>
+		<div class="details clearfix">
+				<div class="title">Документ за произход/ стокова разписка </div>
+				<div class="subtitle">
+					<h6>№ {{id}} / {{dateNew date}}</h6>
+				</div>
+		</div>
+		<div style="display:grid; grid-template-columns:1fr 1fr;column-gap:25px; margin-bottom: 15px;">	
+			<div id="project" style="border: 1px solid #C1CED9;padding: 10px 10px;">
+                    <h3 style="border-bottom: #C1CED9 2px solid;
+    margin-bottom: 10px;">Доставчик</h3>
+					<div style="display: block;" id="insertField">
+						<div><span>Име на фирмата</span>"ЛИДЕР ДЕЙ 2003" ООД </div>
+						<div><span>Рег.№</span> 208105681</div>
+						<div><span> Адрес</span> гр. Ловеч, бул. "България" №1</div>
+						
+					</div>
+				</div>
+				<div id="project" style="border: 1px solid #C1CED9;padding: 10px 10px;">
+                    <h3 style="border-bottom: #C1CED9 2px solid;
+    margin-bottom: 10px;">Получател</h3>
+     {{#each firm}}
+					<div style="display: block;" id="insertField">
+						<div><span>Име на фирмата</span> {{this.name_firm}}</div>
+						<div><span>Рег.№</span> {{this.eik}}</div>
+						<div><span> Адрес</span>{{this.address}} </div>
+						
+					</div>
+						{{/each}}
+				</div>
+			
+			
+				</div>
+	<div class="table-wrapper">
+				<table>
+					<tbody class="head">
+						<tr >
+							<th style="font-size: 1rem !important;
+    padding: 5px 15px;">Вид на артикула</th>
+							<th style="font-size: 1rem !important;
+    padding: 5px 15px;" >Опаковка</th>
+							<th style="font-size: 1rem !important;
+    padding: 5px 15px;"><div>Брой</div></th>
+    <th style="font-size: 1rem !important;
+    padding: 5px 15px;"><div>Ед. цена</div></th>
+							<th style="font-size: 1rem !important;
+    padding: 5px 15px;"><div>Партида</div></th>
+							<th style="font-size: 1rem !important;
+    padding: 5px 15px;"><div>Срок на трайност</div></th>
+    <th style="font-size: 1rem !important;
+    padding: 5px 15px;"><div>Сума</div></th>
+						</tr>
+					
+					</tbody>
+					<tbody class="body">
+					    {{#each task}}
+						<tr>
+							<td class="">{{this.name}}</td>
+							<td class="">{{this.packaging}}</td>
+							<td class="quantity">{{this.quantity}}</td>
+							<td contenteditable='true' class="price">{{priceFormat this.price}}</td>
+							<td class="">{{this.batch_num}}</td>
+							<td class="">{{dateNew this.exp_date}}</td>
+							<td class="to_sum">{{multiply this.price this.quantity}}</td>
+						</tr>
+						{{/each}}
+						<tr class="grand-total">
+							<td class="desc">ОБЩА СУМА</td>
+							<td id ="all_sum" class="unit" colspan ="6">{{sum task}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			
+			
+				<div id="pilots" style="display: grid;
+    grid-template-columns: 1fr 1fr;padding-top:10px">
+				 <span style="    padding: 10px 10px;
+    display: flex; text-align: justify;text-justify: inter-word; font-weight: bold;  grid-column: 1 / span 2;    font-size: small;">
+                    Със следния документ потвърждавам, че горепосочените готови за консумация кулинарни изделия са произведени съгласно технологичната документация на фирмата. Същите са предназначени за човешка консумация и са произведени при спазването на Българската и Европейската нормативна база, касаещи безопасността на храните.
+                </span>
+            
+	
+				</div>
+
+	</section>
+	<footer>
+		<div class="container">
+			<div class="notice">
+				<div><i class="ri-map-pin-2-fill"></i>5500 гр.Ловеч,  бул. "България" №1 </div>
+				<div><i class="ri-phone-fill"></i> +359 890 915 060 </div>
+			</div>
+		</div>
+	</footer>
+
+        </div>
+        
+  <script>
+      var editable = document.querySelectorAll('[contenteditable=true]');
+      const sum = document.querySelector('#all_sum');
+       
+for (var i=0, len = editable.length; i<len; i++){
+    editable[i].onblur = function(){
+          let rowProd= 0;
+          var total = 0;
+    let parent = this.closest("tr");
+    let quantity = parent.querySelector('.quantity').innerText;
+    rowProd = (parseFloat(this.innerText)*parseInt(quantity)).toFixed(2);
+    parent.querySelector('.to_sum').innerText = rowProd;
+  document.querySelectorAll(".to_sum").forEach(el => {
+                total += parseFloat(el.innerText);
+            });
+            sum.innerText = total.toFixed(2);
+    };
+    
+}
+
+
+  </script>

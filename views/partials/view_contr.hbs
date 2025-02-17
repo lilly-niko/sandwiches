@@ -1,0 +1,139 @@
+<table id="certifTable" class="table table-striped table-hover" style="width: 100% !important;">
+    <thead>
+        <tr>
+            <th rowspan="2" >№ </th>
+            <th rowspan="2"  class="name truncate">Вид контрагент</th>
+            <th colspan="3" class="dt-center" data-dt-order="disable">Фирма</th>
+            <th rowspan="2" >Транспортно средство № </th>
+        </tr>
+         <tr>
+            <th class="name truncate">Булстат</th>
+            <th>Пълно име</th>
+            <th class="name truncate">Адрес</th>
+        </tr>
+    </thead>
+    <tbody>
+       {{#each data}}
+        <tr id="{{this.id}}">
+             <td class="number"> </td>
+            <td class="td-data">{{{get_role this.type}}} </td>
+            <td class="td-data">{{this.eik}}</td>
+            <td class="td-data">{{this.name_firm}} </td>
+            <td class="td-data">{{this.address}}</td>
+             <td class="td-data">{{this.transport_num}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+
+    <script>
+        $(document).ready(function () {
+   
+            var table_c = $('#certifTable').on( 'draw.dt', function () {
+      let n = 0;
+    $(".number").each(function () {
+            $(this).html(++n);
+        })
+        }).DataTable({
+                'columnDefs': [
+                    { className: 'dt-center', targets: '_all' },{ type: 'string', targets: [1,2,3,4], 'orderable': true },{
+                    'targets': 0,
+            "searchable": false,
+            "orderable": false,
+                    'width': '5%'
+                }],
+                'order': [
+        [1, 'asc']],
+                "pageLength": 50,
+                'language': {
+                    "lengthMenu": "Покажи _MENU_ записа на страница",
+                    "emptyTable":     "Няма налични записи",
+            "zeroRecords": "Няма налични записи за избрания критерий ",
+            "info": "Показана страница _PAGE_ от _PAGES_",
+            "infoEmpty": "Показани 0 до 0 от 0 записа",
+            "infoFiltered": "(филтрирани от общо _MAX_  записа)",
+            "search":         "Търсене:",
+                    //customize pagination prev and next buttons: use arrows instead of words
+                    'paginate': {
+                        'previous': '<i class="ri-arrow-left-s-line"></i>',
+                        'next': '<i class="ri-arrow-right-s-line"></i>'
+                    },
+                    'select': {
+            'rows': {
+                _: 'Избрани %d реда',
+                1: 'Избран 1 ред'
+            }
+        }
+                },
+                 'layout': {
+        'topStart': {
+            'buttons': [
+                {
+                    text: 'Добави запис',
+                    action: function (e, dt, node, config) {
+                        console.log(e);
+                        console.log(dt);
+                        console.log(node);
+                        $('#addTaskModal').modal("show");
+                        //alert('Button activated');
+                    }
+                },
+                {
+      text: 'Редактирай',
+      extend: 'selected',
+      action: function(e, dt, node, config) {
+           var id= dt.rows( { selected: true } ).data()[0].DT_RowId;
+             var type= dt.rows({ selected: true }).data()[0][1];
+                var eik= dt.rows({ selected: true }).data()[0][2];
+               var name= dt.rows({ selected: true }).data()[0][3];
+               var address= dt.rows({ selected: true }).data()[0][4];
+                var transport_num= dt.rows({ selected: true }).data()[0][5];
+               
+                 document.getElementById("id_edit").value=id;
+                 document.getElementById("name_edit").value=name;
+                 document.getElementById("eik_edit").value=eik;
+                 document.getElementById("address_edit").value=address;
+                 document.getElementById("transport_num_edit").value=transport_num;
+                 var dd = document.getElementById('type_edit');
+                 for (var i = 0; i < dd.options.length; i++) {
+    if (dd.options[i].text === type) {
+        dd.selectedIndex = i;
+        break;
+    }
+}
+         $('#editContragentsModal').modal("show");
+      }
+                }
+               /* {
+      text: 'Изтрий',
+      extend: 'selected',
+      action: function(e, dt, node, config) {
+          var id= dt.rows({ selected: true }).data()[0][0];
+          if (!confirm('Сигурни ли сте че искате да изтриете избрания запис?')) {
+            e.preventDefault();
+        }
+        $.post(`/deleteContragents/${id}`, (data, status) => {
+  this.html(data);
+});
+    }
+            
+        }*/
+        ]
+        }
+    },
+    'select': true
+            })
+
+        
+            $('#certifTable').on('select.dt deselect.dt', function() {
+  table_c.buttons( ['.edit'] ).enable(
+    table_c.rows( { selected: true } ).indexes().length === 0 ? false : true
+  )
+});
+
+        });
+        
+            
+    </script>
+   

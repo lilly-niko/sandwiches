@@ -1,0 +1,362 @@
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+      <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
+    <!----======== CSS ======== -->
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+    input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+    .close_btn {
+    position: absolute;
+    margin-top: -35px;
+    color:red !important;
+    right: 20px;
+    background: #fff !important;
+    padding: 0 5px;
+    cursor: pointer;
+    height:20px !important;
+    width:20px !important;
+}
+        .reg_container{
+    position: relative;
+    width: 98%;
+    border-radius: 6px;
+    padding: 30px;
+    margin: 0 15px;
+    background-color: #fff;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+}
+.reg_container header{
+    position: relative;
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+}
+.reg_container header::before{
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    height: 3px;
+    width: 27px;
+    border-radius: 8px;
+    background-color: #4070f4;
+}
+.reg_container form{
+    position: relative;
+    margin-top: 16px;
+    min-height: 490px;
+    background-color: #fff;
+}
+.reg_container form .form{
+    position: absolute;
+    background-color: #fff;
+    transition: 0.3s ease;
+}
+.reg_container form{
+        overflow-y: scroll;
+    }
+    .reg_container form::-webkit-scrollbar{
+       display: none;
+    }
+
+.reg_container form .title{
+    display: block;
+    margin-bottom: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 6px 0;
+    color: #333;
+}
+.reg_container form .fields{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+form .fields .input-field{
+    display: flex;
+    width: calc(100% / 3 - 15px);
+    flex-direction: column;
+    margin: 4px 0;
+}
+.input-field label{
+    font-size: 12px;
+    font-weight: 500;
+    color: #2e2e2e;
+}
+.input-field input, select{
+    outline: none;
+    font-size: 14px;
+    font-weight: 400;
+    color: #333;
+    border-radius: 5px;
+    border: 1px solid #aaa;
+    padding: 0 15px;
+    height: 42px;
+    margin: 8px 0;
+}
+.input-field input:focus,
+.input-field select:focus{
+    box-shadow: 0 3px 6px rgba(0,0,0,0.13);
+}
+.input-field select,
+.input-field input[type="date"]{
+    color: #707070;
+}
+.input-field input[type="date"]:valid{
+    color: #333;
+}
+.reg_container form button, .backBtn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 45px;
+    max-width: 200px;
+    width: 100%;
+    border: none;
+    outline: none;
+    color: #fff;
+    border-radius: 5px;
+    background-color: #4070f4;
+    transition: all 0.3s linear;
+    cursor: pointer;
+}
+.reg_container form .btnText{
+    font-size: 14px;
+    font-weight: 400;
+}
+form button:hover{
+    background-color: #265df2;
+}
+form button i,
+form .backBtn i{
+    margin: 0 6px;
+}
+form .backBtn i{
+    transform: rotate(180deg);
+}
+form .buttons{
+    display: flex;
+    align-items: center;
+}
+form .buttons button , .backBtn{
+    margin-right: 14px;
+}
+@media (max-width: 750px) {
+    form .fields .input-field{
+        width: calc(100% / 2 - 15px);
+    }
+}
+@media (max-width: 550px) {
+    form .fields .input-field{
+        width: 100%;
+    }
+}
+fieldset {
+  border: 1px solid #4070f4;
+  border-radius:5px;
+  padding: 15px;
+  margin: 0 0 20px 0;
+}
+
+legend {
+  padding: 0.2em 0.5em;
+  font-size: 100%;
+  width: auto !important;
+border-bottom: 0 !important;
+margin-bottom: 0px !important;
+}
+    </style>
+</head>
+<body>  
+{{>nav_bar}}
+    <div class="content" style="top:5rem;">
+                     <div class="reg_container">
+                          <header>Добавяне на клиент</header>
+        <form id="myForm" action="/addClient" method="post">
+                <fieldset class="details personal">
+                    <legend>Информация за клиент</legend>
+                    <div class="fields">
+                        <div class="input-field">
+                            <label>Вид клиент</label>
+                            <select class="type_select" id="type" name="type">
+                                    <option value="1" selected>Физическо лице</option>
+                                    <option value="2">Юридическо лице</option>
+                                    
+                                </select>
+                        </div>
+                        <div class="input-field fizichesko"></div>
+                        <div class="input-field fizichesko"></div>
+                        <div class="input-field firma"  style='display: none;'>
+                            <label>Булстат</label>
+                            <input type="number" id="bulstat" name="bulstat" placeholder="Въведете булстат" >
+                        </div>
+                        <div class="input-field firma"  style='display: none;'>
+                            <label>МОЛ</label>
+                            <input type="text" id="mol" name="mol" placeholder="Въведете МОЛ" >
+                        </div>
+                        <div class="input-field">
+                            <label>Име</label>
+                            <input type="text"  id="name" name="name" placeholder="Въведете име" required>
+                        </div> 
+                        <div class="input-field">
+                            <label>Адрес</label>
+                            <input type="text" id="address" name="address" placeholder="Въведете адрес" required>
+                        </div>
+                        <div class="input-field">
+                            <label>Имейл</label>
+                            <input type="email" id="email" name="email" placeholder="Въведете имейл" required>
+                        </div>
+                        <div class="input-field">
+                            <label>Телефон</label>
+                            <input type="tel"  id="phone" name="phone"
+                            pattern="^(\+\d{3}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$" placeholder="Въведете телефон" required>
+                        </div>
+                        <div class="input-field">
+                            <label>Дата на фактуриране</label>
+                            <input type="number" id="number" name="factura_date" placeholder="Въведете дата" required>
+                        </div>
+                        <div class="input-field">
+                            <label>Период на фактуриране</label>
+                            <select class="type_select" id="factura_period" name="factura_period">
+                                    <option value="1" selected>1 месец</option>
+                                    <option value="2">2 месеца</option>
+                                    <option value="3">3 месеца</option>
+                                    <option value="4">4 месеца</option>
+                                    <option value="6">6 месеца</option>
+                                    <option value="12">12 месеца</option>
+                                </select>
+                        </div>
+                        
+                        
+                    </div>
+                </fieldset>
+            <button class="nextBtn">
+                        <span class="btnText">Запиши данни</span>
+                        <i class="uil uil-navigator"></i>
+                    </button>
+        </form>
+        </div>
+
+    </div>
+     <div id="dialog" class="modal fade">
+         <div class="modal-dialog" style="width:400px">
+      <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Добавяне на обекти</h4>
+          </div>
+
+          <div class="modal-body">
+            
+            <div id="lb-warning">
+<p>Клиент `+response.client_name +` е успешно създаден!
+              </p>
+              <p>Искате ли да добавите обекти към въведения клиент?
+              </p>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <input type="button" id="close" class="btn btn-default" data-dismiss="modal" value="Затвори">
+            <input type="button" id="addObjects" class="btn btn-primary" value="Добави">
+          </div>
+        
+      </div>
+    </div>
+  </div>
+     <script>
+     function activateDelete () {console.log(event.srcElement.closest("fieldset"));
+  const element = document.getElementById(event.srcElement.closest("fieldset").id);
+element.remove();
+};
+     let insertedItems=0;
+     let client_id;
+      function myFunction() {
+          insertedItems++;
+  var x = document.getElementById("insert_object");
+  x.insertAdjacentHTML("beforeend",
+  `<fieldset class="object_items" id="items_`+ insertedItems+`">
+  <button type="button" class='close_btn' onclick="activateDelete()" >
+        X
+    </button>
+    <legend>Oбект `+ insertedItems+`</legend>
+                    <div class="fields"">
+                        <div class="input-field">
+                            <label>ID на обект</label>
+                            <input type="text"  id="object_id" name="object_id" placeholder="Въведете ID на обект" required>
+                        </div>
+                        <div class="input-field">
+                            <label>Адрес на обект</label>
+                            <input type="text"  id="object_address" name="object_address" placeholder="Въведете адрес" required>
+                        </div>
+                        <div class="input-field">
+                            <label>Базова месечна тарифа(без ДДС)</label>
+                            <input type="number"  id="monthly_tax" name="monthly_tax" placeholder="Въведете месечна тарифа" required>
+                        </div>
+                    </div>
+                    </fieldset>`);
+}
+document.getElementById("type").onchange = function(){
+     var highlightedItems = document.querySelectorAll(".firma");
+     var fizItems = document.querySelectorAll(".fizichesko");
+     
+  if (this.value == 2) {
+      highlightedItems.forEach((x) => {
+    x.style.display = "flex";
+      });
+       fizItems.forEach((x) => {
+    x.style.display = "none";
+     });
+    document.getElementById("mol").setAttribute('required','');
+    document.getElementById("bulstat").setAttribute('required','');
+  } else {
+      highlightedItems.forEach((x) => {
+    x.style.display = "none";})
+     fizItems.forEach((x) => {
+    x.style.display = "flex";
+     });
+     document.getElementById("mol").removeAttribute("required");
+     document.getElementById("bulstat").removeAttribute('required');
+  }
+};
+$(document).on('submit', 'form#myForm', function(e) {
+    e.preventDefault();
+    
+    $.post('/addClient', $(this).serialize(), function(response) {
+        client_id = response.client_id;
+        $('#lb-warning').html(`<p>Клиент `+response.client_name +` е успешно създаден!
+              </p>
+              <p>Искате ли да добавите обекти към въведения клиент?
+              </p>
+            `);
+        $('#dialog').modal('show');
+    });
+});
+$('#close').click(function(e)
+{
+ e.preventDefault();
+  window.close();
+  console.log('bla');
+        window.location.replace('/clients'); 
+});
+$('#addObjects').click(function(e)
+{
+ e.preventDefault();
+  window.close();
+  console.log(client_id);
+        window.location.replace('/objects_form/'+client_id); 
+});
+    </script>
+</body>
+</html>

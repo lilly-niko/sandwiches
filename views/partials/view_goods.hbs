@@ -1,0 +1,194 @@
+<table id="certifLabTable" class="table table-striped table-hover" style="width: 100% !important;">
+    <thead>
+        <tr>
+            <th  rowspan="2" >№</th>
+            <th  rowspan="2" class="date" >Дата и час на доставка</th>
+            <th colspan="2" class="dt-center" data-dt-order="disable">Доставена суровина</th>
+            <th colspan="4" class="dt-center" data-dt-order="disable">Партида</th>
+            <th rowspan="2" class="dt-center">Доставчик</th>
+            <th rowspan="2" class="dt-center">Транспортно средство</th>
+            <th rowspan="2" class="dt-center">T(°C)</th>
+            <th colspan="2" class="dt-center" data-dt-order="disable">Придружаваш документ</th>
+            <th  rowspan="2" >Hidden</th>
+        </tr>
+          <tr>
+            <th>Наименование</th>
+            <th>Вид</th>
+            <th>Вид опаковка</th>
+            <th>Брой</th>
+            <th>Кг</th>
+            <th>№</th>
+            <th>Вид</th>
+            <th  class="date" >№</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each data}}
+        <tr id="{{this.id_n}}">
+            <td class="number"></td>
+            <td class="td-data">{{dateTimeNew this.datetime}}</td>
+            <td class="td-data">{{this.name}}</td>
+            <td class="td-data">{{this.type}}</td>
+            <td class="td-data">{{this.packaging}}</td>
+            <td class="td-data">{{this.quantity}}</td>
+            <td class="td-data">{{numberFormat this.kilo}}</td>
+             <td class="td-data">{{this.batch}}</td>
+            <td class="td-data">{{this.name_firm}}</td>
+            <td class="td-data">{{this.transport_num}}</td>
+            <td class="td-data">0-4</td>
+            <td class="td-data">фактура</td>
+            <td class="td-data">{{this.faktura}}</td>
+            <td class="td-data">{{dateNew this.date}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<script>
+ var collapsedGroups = {};
+  $(document).ready(function () {
+   
+            var table_c = $('#certifLabTable').on( 'draw.dt', function () {
+      let n = 0;
+    $(".number").each(function () {
+            $(this).html(++n);
+        })
+        }).DataTable({
+                'columnDefs': [{
+                    "searchable": false,
+            "orderable": false,
+                    'targets': 0,
+                    'width': '5%'
+                },
+                { type: 'date', "targets": 1 },
+                {
+      targets: 13, visible: false
+    }
+                ],
+                'order': [],
+                "pageLength": 50,
+                "scrollX":true,
+                'language': {
+                    "lengthMenu": "Покажи _MENU_ записа на страница",
+                    "emptyTable":     "Няма налични записи",
+            "zeroRecords": "Няма налични записи за избрания критерий ",
+            "info": "Показана страница _PAGE_ от _PAGES_",
+            "infoEmpty": "Показани 0 до 0 от 0 записа",
+            "infoFiltered": "(филтрирани от общо _MAX_  записа)",
+            "search":         "Търсене:",
+                    //customize pagination prev and next buttons: use arrows instead of words
+                    'paginate': {
+                        'previous': '<i class="ri-arrow-left-s-line"></i>',
+                        'next': '<i class="ri-arrow-right-s-line"></i>'
+                    },
+                    'select': {
+            'rows': {
+                _: 'Избрани %d реда',
+                1: 'Избран 1 ред'
+            }
+        }
+                },
+                'rowGroup' : {
+        // Uses the 'row group' plugin
+        'dataSrc': 13,
+        'startRender': function (rows, group) {
+            var collapsed = !!collapsedGroups[group];
+            let sum=0;
+
+            rows.nodes().each(function (r) {
+          r.style.display = 'none';
+          if (collapsed) {
+            r.style.display = '';
+          }});
+   
+
+            // Add category name to the <tr>. NOTE: Hardcoded colspan
+            return $('<tr/>')
+                .append('<td colspan="13">' + group + ' (' + rows.count() + ')</td>')
+                .attr('data-name', group)
+                .toggleClass('collapsed', collapsed);
+        }
+                },
+                 'layout': {
+        'topStart': {
+            'buttons': [
+                {
+                    text: 'Добави запис',
+                    action: function (e, dt, node, config) {
+                        console.log(e);
+                        console.log(dt);
+                        console.log(node);
+                        $('#addTaskModal').modal("show");
+                        //alert('Button activated');
+                    }
+                },
+                {
+      text: 'Редактирай',
+      extend: 'selected',
+      action: function(e, dt, node, config) {
+           var id= dt.rows( { selected: true } ).data()[0].DT_RowId;
+             var datetime= dt.rows({ selected: true }).data()[0][1].split(" ");
+              var type= dt.rows({ selected: true }).data()[0][2]; 
+              var quant= dt.rows({ selected: true }).data()[0][5];
+              var kilo= dt.rows({ selected: true }).data()[0][6];
+              var batch= dt.rows({ selected: true }).data()[0][7];
+             
+              var supplier= dt.rows({ selected: true }).data()[0][8]; 
+              var faktura= dt.rows({ selected: true }).data()[0][12];
+                 
+                 document.getElementById("id_edit").value=id;
+                 document.getElementById('delivery_datetime_edit').value = new Date(datetime[0].split("/").reverse().join('-')).toISOString().substring(0, 16);
+                 document.getElementById("quant_edit").value=quant;
+                 document.getElementById("quant_old").value=quant;
+                 document.getElementById("batch_edit").value=batch;
+                 document.getElementById("kilo_edit").value=kilo;
+                 document.getElementById("kilo_old").value=kilo;
+                 document.getElementById("faktura_edit").value=faktura;
+                 var dd = document.getElementById('type_edit');
+                 for (var i = 0; i < dd.options.length; i++) {
+    if (dd.options[i].text === type) {
+        dd.selectedIndex = i;
+        break;
+    }
+} var supp = document.getElementById('supplier_edit');
+                 for (var i = 0; i < supp.options.length; i++) {
+    if (supp.options[i].text === supplier) {
+        supp.selectedIndex = i;
+        break;
+    }
+}
+         $('#editTaskModal').modal("show");
+      }
+                },
+                {
+      text: 'Изтрий',
+      extend: 'selected',
+      action: function(e, dt, node, config) {
+          var id= dt.rows( { selected: true } ).data()[0].DT_RowId;
+          if (!confirm('Сигурни ли сте че искате да изтриете избрания запис?')) {
+            e.preventDefault();
+        }
+        $.post(`/deleteProducts/${id}`, (data, status) => {
+ location.reload();
+});
+    }
+            
+        }
+        ]
+        }
+    },
+    'select': true
+            })
+           
+            $('#certifLabTable').on('select.dt deselect.dt', function() {
+  table_c.buttons( ['.edit'] ).enable(
+    table_c.rows( { selected: true } ).indexes().length === 0 ? false : true
+  )
+})
+ $('#certifLabTable tbody').on('click', 'tr.dtrg-start', function () {
+        var name = $(this).data('name');
+        console.log(name);
+        collapsedGroups[name] = !collapsedGroups[name];
+        table_c.draw(false);
+    });  
+        })
+</script>

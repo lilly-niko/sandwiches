@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<!-- Created By CodingLab - www.codinglabweb.com -->
+<html lang="en">
+
+<head>
+	
+	<!-- Google Font -->
+	<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.css">
+	
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+		integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+		crossorigin="anonymous"></script>
+	
+	
+      <script src='https://cdn.datatables.net/2.0.8/js/dataTables.js'></script>
+    <script src='https://cdn.datatables.net/rowgroup/1.5.0/js/dataTables.rowGroup.js'></script>
+    <script src='https://cdn.datatables.net/rowgroup/1.5.0/js/rowGroup.dataTables.js'></script>
+    
+    <script src='https://cdn.datatables.net/responsive/2.1.0/js/dataTables.responsive.min.js'></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.js"></script>
+    
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.js"></script>
+     <script src='https://cdn.datatables.net/fixedheader/4.0.1/js/dataTables.fixedHeader.js'></script>
+    <script src='https://cdn.datatables.net/fixedheader/4.0.1/js/fixedHeader.dataTables.js'></script>
+
+    <script src='https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js'></script>
+    <link rel='stylesheet' href='https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap5.min.css'>
+    
+     <link rel='stylesheet' href='https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css'>
+    <link rel='stylesheet' href='https://cdn.datatables.net/fixedheader/4.0.1/css/fixedHeader.dataTables.css'>
+
+    <script type="text/javascript" src="/test.js"></script>
+<link rel="stylesheet" href="style.css" type="text/css">
+
+		<style>
+
+   th>select {
+    word-wrap: normal;
+    width: 100% !important;
+}
+table.dataTable td.dt-control:before {
+ font-family: remixicon;
+   content: "\ef78";
+    border-left: 10px solid rgba(0, 0, 0, 0);
+     
+}
+table.dataTable tr.dt-hasChild td.dt-control:before {
+    font-family: remixicon;
+    content: "\f2eb";
+       border-top: 0px solid rgba(0, 0, 0, 0);
+}
+{{#if (check_accounting user_details.role)}}
+table.dataTable > tbody > tr.new:after {
+    font-family: remixicon;
+    content: "\f465";
+    position: relative;
+    left: 100%;
+    color:red;
+}
+{{/if}}
+		</style>
+		
+</head>
+
+
+<body>
+	{{>header_mod}}
+	<div class="container" style="position: relative; top:7rem; width:auto">
+		<div class="container-fluid p-0">
+
+			<div id="tsum-tabs">
+				<input id="tab1" type="radio" name="tabs" checked>
+				<label for="tab1">Хладилник 1</label>
+
+				<input id="tab2" type="radio" name="tabs">
+				<label for="tab2">Хладилник 2</label>
+
+				<input id="tab3" type="radio" name="tabs">
+				<label for="tab3">Готова продукция</label>
+				
+				<input id="tab4" type="radio" name="tabs">
+				<label for="tab4">Хляб</label>
+			
+
+					<section id="content1">
+							{{>info}}
+							<div class="actions">
+                  <button class="btn btn-light" type="submit"  onclick="myFunction1(event)" id="task">Занули избраните </button> 
+                     
+                </div>
+							
+									<div id="example1" class="table" style="width:100%;padding-top: 20px;">
+									    	<table class="table">
+										<thead>
+											<tr>
+											    <th><input type="checkbox" id="checkall" /></th>
+											    <th>Име</th>
+												<th>Партида</th>
+												<th>Дата на доставка</th>
+												<th>Наличност</th>
+											</tr>
+										</thead>
+										<tbody>
+										    {{#each data_1}}							<tr id="{{this.id_n}}">
+										        <td><input type="checkbox" class="checkthis" /></td>
+												<td>{{this.name}}</td>
+												<td>{{this.batch}}</td>
+												<td>{{this.datetime}}</td>
+												<td>{{this.left_quant}}</td>
+											</tr>
+										{{/each}}
+											{{#unless data_1}}
+										 	<tr><td colspan=5 style="text-align: center;">Няма наличност</td></td></tr>
+										{{/unless}}
+										</tbody>
+											</table>
+									</div>
+							
+							
+				</section>
+
+					<section id="content2">
+					{{>info}}
+						<div class="actions">
+                  <button class="btn btn-light" type="submit"  onclick="myFunction2(event)" id="task">Занули избраните </button> 
+                     
+                </div>
+									<div id="example2" class="table" style="width:100%;padding-top: 20px;">
+									    	<table class="table">
+										<thead>
+											<tr>
+											    <th><input type="checkbox" id="checkall" /></th>
+											    <th>Име</th>
+												<th>Партида</th>
+												<th>Дата на доставка</th>
+												<th>Наличност</th>
+											</tr>
+										</thead>
+										<tbody>
+										    {{#each data_2}}							<tr id="{{this.id_n}}">
+										        <td><input type="checkbox" class="checkthis" /></td>
+												<td>{{this.name}}</td>
+												<td>{{this.batch}}</td>
+												<td>{{this.datetime}}</td>
+												<td>{{this.left_quant}}</td>
+											</tr>
+										{{/each}}
+											{{#unless data_2}}
+										 	<tr><td colspan=5 style="text-align: center;">Няма наличност</td></td></tr>
+										{{/unless}}
+										</tbody>
+											</table>
+									</div>
+							
+				</section>
+
+					<section id="content3">
+					{{>info}}
+					<div class="actions">
+                  <button class="btn btn-light" type="submit"  onclick="myFunction3(event)" id="task">Занули избраните </button> 
+                     
+                </div>
+									<div id="example3" class="table" style="width:100%;padding-top: 20px;">
+									    	<table class="table">
+										<thead>
+											<tr>
+											    <th><input type="checkbox" id="checkall" /></th>
+											    <th>Вид</th>
+												<th>Дата на производство</th>
+												<th>Партида</th>
+												<th>Количество</th>
+												<th>Срок на годност</th>
+											</tr>
+										</thead>
+										<tbody>
+										{{#each production}}							<tr id="{{this.idntfr}}">
+										<td><input type="checkbox" class="checkthis" /></td>
+												<td>{{this.name}}</td>
+												<td>{{this.date}}</td>
+												<td>{{this.batch_num}}</td>
+												<td>{{this.left_quant}}</td>
+	    										<td>{{this.exp_date}}</td>
+											
+											</tr>
+										{{/each}}
+										{{#unless production}}
+										 	<tr><td colspan=5 style="text-align: center;">Няма наличност</td></td></tr>
+										{{/unless}}
+										</tbody>
+											</table>
+									</div>
+							
+				</section>
+				
+					<section id="content4">
+					{{>info}}
+						<div class="actions">
+                  <button class="btn btn-light" type="submit"  onclick="myFunction4(event)" id="task">Занули избраните </button> 
+                     
+                </div>
+									<div id="example4"  class="table" style="width:100%;padding-top: 20px;">
+									    	<table class="table">
+										<thead>
+											<tr>
+											    <th><input type="checkbox" id="checkall" /></th>
+											    <th>Вид</th>
+												<th>Партида</th>
+												<th>Дата на доставка</th>
+												<th>Брой</th>
+											</tr>
+										</thead>
+										<tbody>
+										    {{#each data_bread}}							<tr id="{{this.id_n}}">
+										        <td><input type="checkbox" class="checkthis" /></td>
+												<td>{{this.name}}</td>
+												<td>{{this.batch}}</td>
+												<td>{{this.datetime}}</td>
+												<td>{{this.left_quant}}</td>
+											</tr>
+										{{/each}}
+											{{#unless data_bread}}
+										 	<tr><td colspan=4 style="text-align: center;">Няма наличност</td></td></tr>
+										{{/unless}}
+										</tbody>
+											</table>
+									</div>
+							
+				</section>
+
+			</div>
+
+
+
+		</div>
+	</div>
+	<script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+    <script src="/main.js"></script>
+    <script>
+    let ids1=[],ids2=[],ids3=[],ids4=[];
+          $("#example1 #checkall").click(function () {
+        if ($("#example1 #checkall").is(':checked')) {
+            $("#example1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+                var rowdataId = this.parentNode.parentNode.id;
+                if(rowdataId){
+                ids1.push(rowdataId);
+                }
+            });
+
+        } else {
+            $("#example1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+                var rowdataId = this.parentNode.parentNode.id;
+                const index = ids1.indexOf(rowdataId);
+                ids1.splice(index, 1);
+                 console.log(ids1);
+
+            });
+        }
+    });
+    $("#example1 input[type=checkbox]").click(function () {
+            var rowdataId = this.parentNode.parentNode.id;
+            if(rowdataId){
+                if($(this).is(':checked')){
+                console.log(rowdataId);
+                ids1.push(rowdataId);
+                console.log(ids1);
+                }
+                else{
+                 const index = ids1.indexOf(rowdataId);
+                ids1.splice(index, 1);
+                 console.log(ids1);
+                }
+            }
+            });
+
+    </script>
+    <script>
+          $("#example2 #checkall").click(function () {
+        if ($("#example2 #checkall").is(':checked')) {
+            $("#example2 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+                var rowdataId = this.parentNode.parentNode.id;
+                if(rowdataId){
+                console.log(rowdataId);
+                ids2.push(rowdataId);
+                console.log(ids2);
+                }
+            });
+
+        } else {
+            $("#example2 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+                var rowdataId = this.parentNode.parentNode.id;
+                const index = ids2.indexOf(rowdataId);
+                ids2.splice(index, 1);
+                 console.log(ids2);
+
+            });
+        }
+    });
+    $("#example2 input[type=checkbox]").click(function () {
+            var rowdataId = this.parentNode.parentNode.id;
+            if(rowdataId){
+                if($(this).is(':checked')){
+                console.log(rowdataId);
+                ids2.push(rowdataId);
+                console.log(ids2);
+                }
+                else{
+                 const index = ids2.indexOf(rowdataId);
+                ids2.splice(index, 1);
+                 console.log(ids2);
+                }
+            }
+            });
+	
+    </script>
+    <script>
+          $("#example3 #checkall").click(function () {
+        if ($("#example3 #checkall").is(':checked')) {
+            $("#example3 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+                var rowdataId = this.parentNode.parentNode.id;
+                if(rowdataId){
+                console.log(rowdataId);
+                ids3.push(rowdataId);
+                console.log(ids3);
+                }
+            });
+
+        } else {
+            $("#example3 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+                var rowdataId = this.parentNode.parentNode.id;
+                const index = ids3.indexOf(rowdataId);
+                ids3.splice(index, 1);
+                 console.log(ids3);
+
+            });
+        }
+    });
+    $("#example3 input[type=checkbox]").click(function () {
+            var rowdataId = this.parentNode.parentNode.id;
+            if(rowdataId){
+                if($(this).is(':checked')){
+                console.log(rowdataId);
+                ids3.push(rowdataId);
+                console.log(ids3);
+                }
+                else{
+                 const index = ids3.indexOf(rowdataId);
+                ids3.splice(index, 1);
+                 console.log(ids3);
+                }
+            }
+            });
+    </script>
+    <script>
+          $("#example4 #checkall").click(function () {
+        if ($("#example4 #checkall").is(':checked')) {
+            $("#example4 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+                var rowdataId = this.parentNode.parentNode.id;
+                if(rowdataId){
+                console.log(rowdataId);
+                ids4.push(rowdataId);
+                console.log(ids4);
+                }
+            });
+
+        } else {
+            $("#example4 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+                var rowdataId = this.parentNode.parentNode.id;
+                const index = ids4.indexOf(rowdataId);
+                ids4.splice(index, 1);
+                 console.log(ids4);
+
+            });
+        }
+    });
+    $("#example4 input[type=checkbox]").click(function () {
+            var rowdataId = this.parentNode.parentNode.id;
+            if(rowdataId){
+                if($(this).is(':checked')){
+                console.log(rowdataId);
+                ids4.push(rowdataId);
+                console.log(ids4);
+                }
+                else{
+                 const index = ids4.indexOf(rowdataId);
+                ids4.splice(index, 1);
+                 console.log(ids4);
+                }
+            }
+            });
+	
+    </script>
+    <script>
+         function myFunction1 (e) {
+                                if (!confirm('Сигурни ли сте че искате да изтриете избраните записи?')) {
+                                    e.preventDefault();
+                                }else{
+                                fetch("/deleteStorage", {
+                                    method: "POST",
+                                    redirect: "manual",
+                                    body: JSON.stringify({ ids: ids1}),
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                    }
+                                }).then(async response => {
+
+                                    console.log(response);
+                                    if (response.type == "opaqueredirect") {
+                                        // To make sure the fetch is with redirect response return.  
+                                        window.location.replace('/warehouse'); // create one and only one request
+                                        return;
+                                    }
+                                }).catch((err) => {
+                                    console.log(err);
+                                    cannotUploadMessage.style.cssText = "display: flex; animation: fadeIn linear 1.5s;";
+                                });
+
+
+}
+
+                            };
+        function myFunction2 (e) {
+                                if (!confirm('Сигурни ли сте че искате да изтриете избраните записи?')) {
+                                    e.preventDefault();
+                                }else{
+                                fetch("/deleteStorage", {
+                                    method: "POST",
+                                    redirect: "manual",
+                                    body: JSON.stringify({ ids: ids2}),
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                    }
+                                }).then(async response => {
+
+                                    console.log(response);
+                                    if (response.type == "opaqueredirect") {
+                                        // To make sure the fetch is with redirect response return.  
+                                        window.location.replace('/warehouse'); // create one and only one request
+                                        return;
+                                    }
+                                }).catch((err) => {
+                                    console.log(err);
+                                    cannotUploadMessage.style.cssText = "display: flex; animation: fadeIn linear 1.5s;";
+                                });
+
+
+}
+
+                            };
+        function myFunction3 (e) {
+                                if (!confirm('Сигурни ли сте че искате да изтриете избраните записи?')) {
+                                    e.preventDefault();
+                                }else{
+                                fetch("/deleteSandwiches", {
+                                    method: "POST",
+                                    redirect: "manual",
+                                    body: JSON.stringify({ ids: ids3}),
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                    }
+                                }).then(async response => {
+
+                                    console.log(response);
+                                    if (response.type == "opaqueredirect") {
+                                        // To make sure the fetch is with redirect response return.  
+                                        window.location.replace('/warehouse'); // create one and only one request
+                                        return;
+                                    }
+                                }).catch((err) => {
+                                    console.log(err);
+                                    cannotUploadMessage.style.cssText = "display: flex; animation: fadeIn linear 1.5s;";
+                                });
+
+
+}
+
+                            };
+        function myFunction4 (e) {
+                                if (!confirm('Сигурни ли сте че искате да изтриете избраните записи?')) {
+                                    e.preventDefault();
+                                }else{
+                                fetch("/deleteStorage", {
+                                    method: "POST",
+                                    redirect: "manual",
+                                    body: JSON.stringify({ ids: ids4}),
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                    }
+                                }).then(async response => {
+
+                                    console.log(response);
+                                    if (response.type == "opaqueredirect") {
+                                        // To make sure the fetch is with redirect response return.  
+                                        window.location.replace('/warehouse'); // create one and only one request
+                                        return;
+                                    }
+                                }).catch((err) => {
+                                    console.log(err);
+                                    cannotUploadMessage.style.cssText = "display: flex; animation: fadeIn linear 1.5s;";
+                                });
+
+
+}
+
+                            };
+    </script>
+    <script>
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+    </script>
+</html>

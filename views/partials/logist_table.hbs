@@ -1,0 +1,65 @@
+<table id="myTable" class="table table-striped table-hover" style="width: 100% !important;">
+    <thead>
+        <tr>
+            <th><input type="checkbox" name="select_all" value="1" id="example-select-all">
+            </th>
+            <th class="date">Дата</th>
+            <th> Пилот</th>
+            <th>Тел. за контакт</th>
+           <th class="name truncate">Поле</th>
+            <th> Земеделец</th>
+            
+            <th> Брой капсули</th>
+            <th> Приоритет</th>
+            <th> Статус</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each tasks}}
+        <tr id="{{this.order_id}}">
+            <td> <input type="checkbox" name="id[]"></td>
+             <td class="td-data">{{this.date}}</td>
+             <td class="td-data">{{this.pilotName}}</td>
+             <td class="td-data">{{this.pilotPhone}}</td>
+            <td class="td-data" id={{this.id_field}}>{{this.idntfr}}</td>
+            <td class="td-data" id={{this.userId}} > {{this.name}}</a></td>
+
+               <td class="td-data">{{this.area}}0</td>
+            
+            <td class="td-data">{{{priorityConvert this.priority}}}</td>
+            <td class="td-data">{{{statusLabConvert this.status_lab}}}</td>
+            <td class="td-data">
+                <ul class="utilities list-inline">
+                    
+                     <li style="padding-left: 10px;">
+                         <span onclick="confirmTask()"  data-bs-toggle="modal">
+                            <button class="btn btn-primary" type="submit" id="task" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Потвърди задача" 
+                             ><i class="ri-task-line"></i></button>
+                        </span>
+                    </li>
+                        
+                </ul>
+            </td>
+        </tr>
+        {{/each}}
+       
+    </tbody>
+    <tfoot>
+        <tr>
+            <th></th>
+            <th id="fileCount"></th>
+            <th></th>
+            <th></th>
+             <th></th>
+             <th></th>
+<th></th>
+             <th></th>
+             <th></th>
+            <th><ul class="utilities list-inline">
+                    <li style="padding-left: 10px;">
+                            <button class="btn btn-primary" id="confirmAll" type="submit" id="order" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Приеми избрани"><i class="ri-list-unordered"></i></button>
+                </ul></th>
+        </tr>
+    </tfoot>
+</table>

@@ -1,0 +1,213 @@
+<table id="example" class="table" width="100%">
+        <thead>
+          <tr>
+            <th><input type="checkbox" id="checkall" /></th>
+			<th>Вид сандвич</th>
+			<th scope="col">Опаковка</th>
+			<th scope="col">Тегло</th>
+			<th></th>
+            <th></th>
+          </tr>
+      
+          
+        </thead>
+        <tbody>
+								{{#each data}}
+								<tr	id="{{this.id}}">
+								    <td><input type="checkbox" class="checkthis" /></td>
+									<td>{{this.name}}</td>
+									<td>{{this.packaging}}</td>
+									<td>{{this.weight}}</td>
+									<td></td>
+                                    <td colspan="5">
+										    <div class="cards" style="
+    display: grid;
+    width: 100%;
+    grid-gap: 5%;
+    grid-template-columns: 1fr 1fr;
+    overflow-y: scroll;">
+											<div class="user_card" style=" grid-column: span 2;">
+										    <div class="h5">
+										        Рецепта
+										    </div>
+										<button class="btn btn-primary" id= "editRecipie_{{this.id}}" style="    margin-right: auto;
+								
+    display: none;
+    width: 250px;
+    margin-left: auto;
+    justify-content: center;
+    align-items: center;"><i class="ri-contract-line"></i>
+						<span>Редактиране</span></button>
+							
+											</div>
+											
+										</div>
+										
+									</td>
+								</tr>
+							
+								{{/each}}
+							</tbody>
+
+      </table>
+     <script>
+	const wedges = {{{ json recipie }}};
+	let ids=[];
+	$(document).ready(function () {
+		function format(d) {
+
+			return '<table cellpadding="6" cellspacing="0" border="0"  style="width:100%">' +
+				'<tr>' +
+				'<td>' + d[5] + '</td>' +
+				'</tr>' +
+				'</table>';
+		}
+
+
+		var table = $('#example').DataTable({
+			"columnDefs": [
+				// hide the needed column
+				{ "visible": false, "targets": 5 },
+				{
+					"className": 'dt-control',
+					"orderable": false,
+					"data": null,
+					"defaultContent": '',
+					"width": '30px',
+					"targets": 4
+				},
+				{
+					"width": '30px',
+					"orderable": false,
+					"targets": 0
+				}
+			],
+			"pageLength": 100,
+			 "order": [[1, 'asc']],
+			"fixedHeader": {
+				header: true,
+				footer: false,
+				headerOffset: 70
+			},
+			'language': {
+				"lengthMenu": "Покажи _MENU_ записа на страница",
+				"emptyTable": "Няма налични записи",
+				"zeroRecords": "Няма налични записи за избрания критерий ",
+				"info": "Показана страница _PAGE_ от _PAGES_",
+				"infoEmpty": "Показани 0 до 0 от 0 записа",
+				"infoFiltered": "(филтрирани от общо _MAX_  записа)",
+				"search": "Търсене:",
+				//customize pagination prev and next buttons: use arrows instead of words
+				'paginate': {
+					'previous': '<i class="ri-arrow-left-s-line"></i>',
+					'next': '<i class="ri-arrow-right-s-line"></i>'
+				}
+			}
+		});
+
+		// Add event listener for opening and closing details
+		table.on('click', 'td.dt-control', function (e) {
+			let tr = e.target.closest('tr');
+			let row = table.row(tr);
+			console.log(tr.id);
+			if (row.child.isShown()) {
+				// This row is already open - close it
+				row.child.hide();
+			}
+			else {
+				// Open this row
+				var id= tr.id;
+				row.child(format(row.data())).show();
+				let table = '<br><table class="table table-bordered">';
+				table += '<tr><td>Продукт</td><td>Количество</td></tr>';
+
+				var contr_info = document.getElementById("editRecipie_"+id);
+				console.log(contr_info);
+				
+				wedges.forEach((element) => {
+					if (element.recipe_id == id) {
+
+						table += `<tr><td>${element.name}</td>`;
+
+						table += `<td>${element.quantity}</td></tr>`;
+					}
+				});
+				table += '</table>';
+				console.log(table);
+
+				contr_info.insertAdjacentHTML("beforebegin", table);
+
+
+			}
+	});
+
+	
+$("#example #checkall").click(function () {
+        if ($("#example #checkall").is(':checked')) {
+            $("#example input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+                var rowdataId = this.parentNode.parentNode.id;
+                if(rowdataId){
+                console.log(rowdataId);
+                ids.push(rowdataId);
+                console.log(ids);
+                }
+            });
+
+        } else {
+            $("#example input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+                var rowdataId = this.parentNode.parentNode.id;
+                const index = ids.indexOf(rowdataId);
+                ids.splice(index, 1);
+                 console.log(ids);
+
+            });
+        }
+    });
+    $("#example input[type=checkbox]").click(function () {
+            var rowdataId = this.parentNode.parentNode.id;
+            if(rowdataId){
+                if($(this).is(':checked')){
+                console.log(rowdataId);
+                ids.push(rowdataId);
+                console.log(ids);
+                }
+                else{
+                 const index = ids.indexOf(rowdataId);
+                ids.splice(index, 1);
+                 console.log(ids);
+                }
+            }
+            });
+	});
+	 function myFunction (e) {
+                                if (!confirm('Сигурни ли сте че искате да изтриете избрания запис?')) {
+                                    e.preventDefault();
+                                }else{
+                                fetch("/deleteRecipies", {
+                                    method: "POST",
+                                    redirect: "manual",
+                                    body: JSON.stringify({ ids: ids}),
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                    }
+                                }).then(async response => {
+
+                                    console.log(response);
+                                    if (response.type == "opaqueredirect") {
+                                        // To make sure the fetch is with redirect response return.  
+                                        window.location.replace('/recipies'); // create one and only one request
+                                        return;
+                                    }
+                                }).catch((err) => {
+                                    console.log(err);
+                                    cannotUploadMessage.style.cssText = "display: flex; animation: fadeIn linear 1.5s;";
+                                });
+
+
+}
+
+                            }
+
+</script>

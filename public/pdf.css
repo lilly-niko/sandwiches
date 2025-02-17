@@ -1,0 +1,416 @@
+.clearfix:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  .clearfix p{
+      font-size: 1rem;
+    padding: 5px;
+  }
+  .print a {
+    color: #5D6975;
+    text-decoration: underline;
+  }
+  
+  .print {
+    position: relative;
+    width: 21cm;  
+    height: 28.7cm; 
+    margin: 0 auto; 
+    padding: 0 30px;
+    color: #001028;
+    background: #FFFFFF; 
+    font-size: 12px; 
+  }
+  
+  .print header {
+    padding: 10px 0;
+  }
+  
+  #logo {
+   align-content:center;
+  }
+  
+  .logos{
+     display: flex;
+    justify-content: space-between;
+  }
+  
+  #logo img {
+    width: 90px;
+  }
+  
+  .print h1 {
+    border-top: 1px solid  #5D6975;
+    border-bottom: 1px solid  #5D6975;
+    color: #5D6975;
+    line-height: 1.4em;
+    font-weight: normal;
+    text-align: center;
+  }
+  .print h6{
+    margin-block-start: 0.2em;
+    font-size: 22px;
+    font-weight: normal;
+  }
+  .print li {
+    padding: 0px 30px;
+    list-style-type: none;
+}
+.print ul.header__top__widget {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+}
+  #project, #pilots, #company  {
+    padding: 0 10px 10px;
+    width: 100%;
+    border-bottom: 1px solid black;
+  }
+  
+  #project span , #pilots span, #company span{
+    color: #5D6975;
+    display: inline-block;
+    font-size: 0.8em;
+    padding: 5px;
+  }
+    #company div{
+    white-space: nowrap; 
+    font-size: 1.2em; 
+    }
+ 
+  
+  #project div{
+    white-space: nowrap; 
+    font-size: 1.2em;   
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+ 
+  
+  #notices .notice {
+    color: #5D6975;
+    font-size: 0.8em;
+    padding-top: 5px;
+  }
+  #pilots div {
+    white-space: nowrap;
+    font-size: 1.2em;
+    display: flex;
+    justify-content: space-between;
+}
+  
+  .print footer {
+    color: #5D6975;
+    width: 100%;
+    height: 30px;
+    position: absolute;
+    bottom: 0;
+    border-top: 1px solid #C1CED9;
+    padding: 8px 0;
+    text-align: center;
+  }
+  body {
+    font-family: 'Roboto', sans-serif !important;
+}
+  .roboto-thin {
+    font-family: "Roboto", sans-serif;
+    font-weight: 100;
+    font-style: normal;
+  }
+  
+  .roboto-light {
+    font-family: "Roboto", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+  }
+  
+  .roboto-regular {
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+  
+  .roboto-medium {
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+  }
+  
+  .roboto-bold {
+    font-family: "Roboto", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+  }
+  
+  .roboto-black {
+    font-family: "Roboto", sans-serif;
+    font-weight: 900;
+    font-style: normal;
+  }
+  
+  .roboto-thin-italic {
+    font-family: "Roboto", sans-serif;
+    font-weight: 100;
+    font-style: italic;
+  }
+  
+  .roboto-light-italic {
+    font-family: "Roboto", sans-serif;
+    font-weight: 300;
+    font-style: italic;
+  }
+  
+  .roboto-regular-italic {
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    font-style: italic;
+  }
+  
+  .roboto-medium-italic {
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    font-style: italic;
+  }
+  
+  .roboto-bold-italic {
+    font-family: "Roboto", sans-serif;
+    font-weight: 700;
+    font-style: italic;
+  }
+  
+  .roboto-black-italic {
+    font-family: "Roboto", sans-serif;
+    font-weight: 900;
+    font-style: italic;
+  }
+  
+		html {
+			line-height: 1;
+		}
+
+		ol, ul {
+			list-style: none;
+		}
+
+		table {
+			border-collapse: collapse;
+			border-spacing: 0;
+		}
+
+		caption, th, td {
+			text-align: left;
+			font-weight: normal;
+			vertical-align: middle;
+		}
+
+		q, blockquote {
+			quotes: none;
+		}
+		q:before, q:after, blockquote:before, blockquote:after {
+			content: "";
+			content: none;
+		}
+
+		a img {
+			border: none;
+		}
+
+		article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
+			display: block;
+		}
+
+		body {
+			font-family: 'Source Sans Pro', sans-serif;
+			font-weight: 300;
+			font-size: 12px;
+			margin: 0;
+			padding: 0;
+		}
+		body a {
+			text-decoration: none;
+			color: inherit;
+		}
+		body a:hover {
+			color: inherit;
+			opacity: 0.7;
+		}
+		body .container {
+		width: 100%;
+		margin-inline: 0px !important;
+		}
+		body .clearfix:after {
+			content: "";
+			display: table;
+			clear: both;
+		}
+		body .left {
+			float: left;
+		}
+		body .right {
+			float: right;
+		}
+		body .helper {
+			height: 100%;
+		}
+		header {
+			height: 40px;
+			margin-top: 20px;
+			margin-bottom: 70px;
+			padding: 0px 5px 0;
+		}
+		header figure {
+			float: left;
+			width: 40px;
+			margin-right: 10px;
+		}
+		header figure img {
+			height: 40px;
+		}
+		header .company-info {
+			color: #BDB9B9;
+		}
+		header .company-info .title {
+			margin-bottom: 5px;
+			color: #2A8EAC;
+			font-weight: 600;
+			font-size: 2em;
+		}
+		header .company-info .line {
+			display: inline-block;
+			height: 9px;
+			margin: 0 4px;
+			border-left: 1px solid #2A8EAC;
+		}
+
+		section .details {
+			text-align: center;
+			margin-bottom: 30px;
+			padding: 20px 35px;
+			border: 1px solid #C1CED9;
+		}
+		section .details .client {
+			width: 50%;
+			line-height: 16px;
+		}
+		section .details .client .name {
+			font-weight: 600;
+		}
+		section .details .data {
+			width: 50%;
+		}
+		section .details .title {
+			margin-bottom: 10px;
+			font-size: 3em;
+			font-weight: 400;
+			text-transform: uppercase;
+		}
+			section .details .subtitle {
+			font-size: 1.5em;
+			font-weight: 400;
+		}
+		section .table-wrapper {
+			position: relative;
+			overflow: hidden;
+		}
+		section .table-wrapper:before {
+			content: "";
+			display: block;
+			position: absolute;
+			top: 33px;
+			left: 30px;
+			width: 90%;
+			height: 100%;
+			border-top: 2px solid #BDB9B9;
+			border-left: 2px solid #BDB9B9;
+			z-index: -1;
+		}
+		section .no-break {
+			page-break-inside: avoid;
+		}
+		section table {
+			width: 100%;
+		}	
+		section table,th,td {
+			border: 2px solid ;
+		}
+		section table .desc {
+			width: 55%;
+		}
+		
+		section table tbody.head {
+			vertical-align: middle;
+			border-color: inherit;
+		}
+		section table tbody.head th {
+			text-align: center;
+			font-weight: 600;
+			font-size: 1.5em;
+			text-transform: uppercase;
+			background-color:#C1CED9;
+		}
+		section table tbody.head th div {
+			display: inline-block;
+			padding: 7px 0;
+			width: 100%;
+		}
+		section table tbody.head th.desc div {
+			width: 100%;
+			
+		}
+		section table tbody.body td {
+			padding: 5px 5px;
+			font-size: 1.2em;
+			text-align: center;
+		}
+		section table tbody.body h3 {
+			margin-bottom: 5px;
+			font-weight: 600;
+		}
+		section table tbody.body .desc {
+			font-size: 1.2em;
+		}
+			section table tbody.body .qty {
+			text-align: right;
+		}
+	
+		section table tbody.body tr.total td {
+			padding: 5px 10px;
+			text-align: right;
+		}
+		section table tbody.body tr.total .empty {
+			background: white;
+		}
+		section table tbody.body tr.total .total {
+			font-size: 1.18181818181818em;
+			font-weight: 600;
+		}
+		section table tr.grand-total td {
+			background-color: #2A8EAC !important;
+			color: #ffffff !important;
+			font-weight: 400;
+			text-align: right !important;
+			border: black 1px solid;
+		}
+		
+
+		footer {
+			margin-bottom: 20px;
+			padding: 0 5px;
+		}
+		footer .thanks {
+			margin-bottom: 40px;
+			color: #2A8EAC;
+			font-size: 1.16666666666667em;
+			font-weight: 600;
+		}
+		footer .notice {
+			margin-bottom: 25px;
+		}
+		footer .end {
+			padding-top: 5px;
+			border-top: 2px solid #2A8EAC;
+			text-align: center;
+		}

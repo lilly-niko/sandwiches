@@ -1,0 +1,348 @@
+<html lang="en">
+
+<head>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+        integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+        crossorigin="anonymous"></script>
+  <!-- Data Table CSS -->
+  
+    <script src='https://cdn.datatables.net/2.0.7/js/dataTables.js'></script>
+    <script src='https://cdn.datatables.net/buttons/3.0.2/js/dataTables.buttons.js'></script>
+    <script src='https://cdn.datatables.net/buttons/3.0.2/js/buttons.dataTables.js'></script>
+    <script src='https://cdn.datatables.net/select/2.0.2/js/dataTables.select.js'></script>
+     <script src='https://cdn.datatables.net/select/2.0.2/js/select.dataTables.js'></script>
+     
+    <link rel='stylesheet' href='https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css'>
+      <link rel='stylesheet' href='https://cdn.datatables.net/buttons/3.0.2/css/buttons.dataTables.css'>
+      <link rel='stylesheet' href='https://cdn.datatables.net/select/2.0.3/css/select.dataTables.css'>
+
+    
+    <script src="https://cdn.datatables.net/rowgroup/1.5.0/js/dataTables.rowGroup.js"></script>
+     <script src="https://cdn.datatables.net/rowgroup/1.5.0/js/rowGroup.dataTables.js"></script> 
+     
+   <script type="text/javascript" src="/test.js"></script>
+    <link rel="stylesheet" href="/style.css" type="text/css">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/css/bootstrap-select.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/bootstrap-select.min.js"></script>
+
+    <style>
+        .disabled {
+  opacity: 0.3;
+  cursor: not-allowed !important;
+    }
+.slide-controls{
+  position: relative;
+  display: flex;
+  height: 50px;
+  width: 100%;
+  overflow: hidden;
+  margin: 10px 0 10px 0;
+  justify-content: space-between;
+  border: 1px solid lightgrey;
+  border-radius: 5px;
+}
+.slide-controls .slide{
+  height: 100%;
+  width: 100%;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 500;
+  text-align: center;
+  line-height: 48px;
+  cursor: pointer;
+  z-index: 1;
+  transition: all 0.6s ease;
+}
+.slide-controls label.signup{
+  color: #000;
+}
+.slide-controls .slider-tab{
+  position: absolute;
+  height: 100%;
+  width: 50%;
+  left: 0;
+  z-index: 0;
+  border-radius: 5px;
+  background: -webkit-linear-gradient(left, #4fd099, #1ca68a);
+  transition: all 0.6s cubic-bezier(0.68,-0.55,0.265,1.55);
+}
+input[type="radio"]{
+  display: none;
+}
+#signup:checked ~ .slider-tab{
+  left: 50%;
+}
+#signup:checked ~ label.signup{
+  color: #fff;
+  cursor: default;
+  user-select: none;
+}
+#signup:checked ~ label.login{
+  color: #000;
+}
+#login:checked ~ label.signup{
+  color: #000;
+}
+#login:checked ~ label.login{
+  cursor: default;
+  user-select: none;
+}
+    </style>
+   
+</head>
+
+<body>
+      {{>header_mod}}
+    <div class="content">
+        <div class="card" style="  padding: 25px;">
+            <div class="content-panel">
+                <div class="content-header-wrapper">
+                   
+                    <h2 class="title">Входящ контрол на основни суровини и подправки</h2>
+
+                    {{>info}}
+                  
+                </div>
+                
+                    {{>view_goods}}
+             
+            </div>
+        </div>
+    </div>
+    <div id="addTaskModal" class="modal fade">
+        <div class="modal-dialog" style="width: 600px">
+            <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Добавяне на основна суровина</h4>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                    <div class="slide-controls">
+               <input type="radio" name="slide" id="login" checked>
+               <input type="radio" name="slide" id="signup">
+               <label for="login" class="slide login">Съществуваща</label>
+               <label for="signup" class="slide signup">Добави нова</label>
+               <div class="slider-tab"></div>
+            </div>
+                <form method="post" action="/addProduct" class="login">
+                        <div class="user-details">
+                            
+                            <div class="input-box">
+                                <span class="details">Суровина</span>
+                                <select class="type_select" id="type" name="type">
+                                    {{#each goods}}
+                                    <option value="{{this.id}}">{{this.name}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                            <div class="input-box">
+                                <span class="details">Дата и час на доставка</span>
+                                <input type="datetime-local"
+  id="delivery_datetime"
+  name="delivery_datetime" required>
+                            </div>
+                            <div class="input-box">
+                                <span class="details">Партида</span>
+                                 <input type="text" id="batch" name="batch" required>
+                            </div>
+                            <div class="input-box">
+                                <span class="details">Брой</span>
+                                 <input type="number" id="quant" name="quant" value='1' >
+                            </div>
+                            <div class="input-box">
+                                <span class="details">Килограми</span>
+                                 <input type="number" step='0.001' id="kilo" value='1' name="kilo" >
+                            </div>
+                               <div class="input-box">
+                                <span class="details">Доставчик</span>
+                                <select class="type_select" id="supplier" name="supplier">
+                                    {{#each suppliers}}
+                                    <option value="{{this.id}}">{{this.name_firm}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                             <div class="input-box">
+                                <span class="details">Фактура</span>
+                                <input type="text" id="faktura" name="faktura" >
+                            </div>
+                            
+                        </div>
+                          <div class="modal-footer">
+                        <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Отказ">
+                        <input type="submit" class="btn btn-success" value="Добави">
+                    </div>
+                </form>
+                 <form method="post" action="/addNewProduct" class="signup" style="display: none">
+                        <div class="user-details">
+                            
+                             <div class="input-box">
+                                <span class="details">Име на суровина</span>
+                                 <input type="text" id="name" name="name" required>
+                            </div>
+                             <div class="input-box">
+                                <span class="details">Тип продукт (слайс,тостер,...)</span>
+                                 <input type="text" id="type" name="type" required>
+                            </div>
+                             <div class="input-box">
+                                <span class="details">Опаковка</span>
+                                 <input type="text" id="packaging" name="packaging" required>
+                            </div>
+                            <div class="input-box">
+                                <span class="details">Съхранявано в камера №</span>
+                                 <input type="text" id="storage" name="storage" required>
+                            </div>
+                            
+                        </div>
+                          <div class="modal-footer">
+                        <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Отказ">
+                        <input type="submit" class="btn btn-success" value="Добави">
+                    </div>
+                </form>
+          
+        </div>
+ 
+  
+                       </div>
+                          </div>
+                             </div>
+    <div id="editTaskModal" class="modal fade">
+        <div class="modal-dialog" style="width: 600px">
+            <div class="modal-content">
+                <form method="post" action="/editProduct">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Редактиране на запис</h4>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="user-details">
+                            <div class="input-box">
+                                <span class="details">Суровина</span>
+                                <select class="type_select" id="type_edit" name="type_edit">
+                                    {{#each goods}}
+                                    <option value="{{this.id}}">{{this.name}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                            <div class="input-box">
+                                <span class="details">Дата и час на доставка</span>
+                                <input type="datetime-local"
+  id="delivery_datetime_edit"
+  name="delivery_datetime_edit" required>
+                            </div>
+                            <div class="input-box">
+                                <span class="details">Партида</span>
+                                 <input type="text" id="batch_edit" name="batch_edit" required>
+                            </div>
+                            <div class="input-box">
+                                <span class="details">Брой</span>
+                                 <input type="number" id="quant_edit" name="quant_edit" >
+                            </div>
+                            <div class="input-box">
+                                 <input type="number" id="quant_old" name="quant_old"  >
+                            </div>
+                            <div class="input-box">
+                                <span class="details">Килограми</span>
+                                 <input type="number" step='0.001' id="kilo_edit" name="kilo_edit" >
+                            </div>
+                            <div class="input-box">
+                                 <input type="number" id="kilo_old" name="kilo_old"  >
+                            </div>
+                               <div class="input-box">
+                                <span class="details">Доставчик</span>
+                                <select class="type_select" id="supplier_edit" name="supplier_edit">
+                                    {{#each suppliers}}
+                                    <option value="{{this.id}}">{{this.name_firm}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                             <div class="input-box">
+                                <span class="details">Фактура</span>
+                                <input type="text" id="faktura_edit" name="faktura_edit" >
+                            </div>
+                            <input type="text" id="id_edit" name="id_edit" hidden >
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Отказ">
+                        <input type="submit" class="btn btn-success" value="Запиши">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+    
+    <script>
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+
+    async function generatePdfList(filtered, spinHandle,table) {
+    const response = await fetch("/get_file_data?table="+table+"&array=" + filtered ,{
+    method: "GET",
+    headers: {
+      "Content-type": "application/json",
+    }
+  });
+
+  const json = await response.json(); // create a new Blob object.
+  console.log("ready");
+  loadingOverlay().cancel(spinHandle);
+  const files=json.file_data;
+  function download_next(i) {
+    if (i >= files.length) {
+      return;
+    }
+    var a = document.createElement('a');
+
+    const arr = Uint8Array.from(files[i].file_data.data);
+    const decoder = new TextDecoder();
+    const str = decoder.decode(arr);
+    a.href = str;
+    // Use a.download if available, it prevents plugins from opening.
+    if ('download' in a) {
+      a.download = files[i].file_name;
+    }
+    // Add a to the doc for click to work.
+    (document.body || document.documentElement).appendChild(a);
+    if (a.click) {
+      a.click();// The click method is supported by most browser.
+    } else {
+      $(a).click(); // Backup using jquery
+    }
+    // Delete the temporary link.
+    a.parentNode.removeChild(a);
+    // Download the next file with a small timeout. The timeout is necessary
+    // for IE, which will otherwise only download the first file.
+    setTimeout(function() {
+      download_next(i + 1);
+    }, 500);
+  }
+  // Initiate the first download.
+  download_next(0);
+}
+</script>
+
+      <script>
+       const loginBtn = document.querySelector("label.login");
+         const signupBtn = document.querySelector("label.signup");
+         const loginForm = document.querySelector("form.login");
+         const signupForm = document.querySelector("form.signup");
+         signupBtn.onclick = (()=>{
+           loginForm.style.display = "none";
+           signupForm.style.display = "block";
+         });
+         loginBtn.onclick = (()=>{
+           loginForm.style.display = "block";
+           signupForm.style.display = "none";
+         });
+      </script>
+</body>
+
+</html>
