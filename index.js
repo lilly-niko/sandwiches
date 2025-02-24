@@ -944,9 +944,9 @@ let query = "";
 db.query('INSERT INTO clients SET ?', { bulstat: bulstat, type: type, name: name, address: address, phone: phone, email: email, mol: mol, factura_date: factura_date, factura_period: factura_period }, (error, result) => {
   if (error) {
     // set flash message
-    req.flash('error', 'Запис с такова ид съществува!');
+    req.flash('error', error.sqlMessage);
     // redirect to user page
-    return res.redirect('/register');
+    return res.redirect('/form');
   } else {
     const lastInsertedId = result.insertId;
     /*for (let i = 0; i < object_id.length; i++) {
@@ -1020,7 +1020,7 @@ app.post("/addObject", (req, res) => {
   db.query(query, (error, result) => {
     if (error) {
       // set flash message
-      req.flash('error', err.sqlMessage);
+      req.flash('error', error.sqlMessage);
       // redirect to user page
       return res.redirect('/objects');
     } else {
