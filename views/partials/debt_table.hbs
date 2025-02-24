@@ -1,0 +1,32 @@
+<table id="history" class="table table-hover">
+    <thead>
+        <tr>
+            <th><input type="checkbox" name="select_all" value="1" id="history-select-all"></th>
+            <th>Име на клиент</th>
+            <th>Дата на задължение</th>
+            <th>Дължима сума</th>
+            <th></th>
+
+        </tr>
+    </thead>
+    <tbody id="tableBody">
+        {{#each data}}
+        <tr id="history-{{this.debt_id}}">
+            <td class="td-data"> <input type="checkbox" name="id[]"></td>
+            <td class="td-data">{{this.name}}</td>
+            <td class="td-data">{{dateNew this.date_issued}}</td>
+            <td class="td-data">{{this.sum_to_pay}}</td>
+            <td class="td-data"></td>
+        </tr>
+        {{/each}}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th>Сума избрани</th>
+            <th></th>
+            <th></th>
+            <th id="debtSumAll">0</th>
+            <th></th>
+        </tr>
+    </tfoot>
+</table>

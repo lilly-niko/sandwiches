@@ -1031,6 +1031,18 @@ app.post("/addObject", (req, res) => {
     }
   });
 });
+app.get('/debt', (req, res, next) => {
+  const query = "Select debt.*, name from debt join clients on client_id= clients.id and is_paid=0;";
+  db.query(query, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render("debt_view", {
+        data: result
+      });
+    }
+  });
+});
 //listening our express() here
 app.listen(PORT, () => {
   console.log(`Server started on Port :  ${PORT}`)
