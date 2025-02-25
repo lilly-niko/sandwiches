@@ -921,7 +921,7 @@ app.get('/clients', (req, res, next) => {
   });
 });
 app.post("/addClient", (req, res) => {
-  let { bulstat, name, type, address, phone, email, mol, factura_date, factura_period, object_id, object_address, monthly_tax } = req.body;
+  let { bulstat, name, type, address, phone, email, mol, factura_date, factura_period, object_id, object_address, monthly_tax, dds, dds_num, payment_type } = req.body;
   if (typeof object_id === "undefined") {
     object_id = []
   };
@@ -941,12 +941,12 @@ if (!Array.isArray(monthly_tax)) {
   monthly_tax = [monthly_tax];
 }
 let query = "";
-db.query('INSERT INTO clients SET ?', { bulstat: bulstat, type: type, name: name, address: address, phone: phone, email: email, mol: mol, factura_date: factura_date, factura_period: factura_period }, (error, result) => {
+db.query('INSERT INTO clients SET ?', { bulstat: bulstat, type: type, name: name, address: address, phone: phone, email: email, mol: mol, factura_date: factura_date, factura_period: factura_period, dds: dds,dds_num:dds_num, payment_type: payment_type }, (error, result) => {
   if (error) {
     // set flash message
-    req.flash('error', error.sqlMessage);
+    req.flash('error', 'Запис с такова ид съществува!');
     // redirect to user page
-    return res.redirect('/form');
+    return res.redirect('/register');
   } else {
     const lastInsertedId = result.insertId;
     /*for (let i = 0; i < object_id.length; i++) {
