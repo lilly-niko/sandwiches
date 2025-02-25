@@ -17,12 +17,16 @@ const email = new Email({
  },
  send: true,
  transport: {
-  service: 'postfix',
-  host: 'localhost',
+  sendmail: true,
+	newline: 'unix',
+	path: '/usr/sbin/sendmail',
   secure: true,
-  port: 995,
-  auth: { user: 'no_reply_sot@teradev.eu', pass: 'citadela' },
-  tls: { rejectUnauthorized: true }
+	dkim: {
+		domainName: 'tetradev.eu',
+		keySelector: 'mail', // The key you used in your DKIM TXT DNS Record
+		privateKey: 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArtkv1ZNE3FuJPlDQRHyxptRfLkJ0fi3/usman4izyFXpO2++GuHjub4IpOxySzt+b5w4G2DpWSEJ95Y4TPnQssiYW28Zrdg/wLNNtXMhystcAcsCzKQvwkRYi1lzp70FfWzS1ulLKjA7UKwxaqnMY6Pac0DS7eayYENB/EmlRZJgxbhS3uwHGVre094GrTZjvYo2DcTgQnG/ELJSf3OVDzcYh2n5Wfyl4nnwXNCUKWrjjCekzwKdPx5vzEha+rAXn1wsx1Kr+BgYFKO/ohJUxZ25Sn7IlC50RVN3GbotQhEfJ+pt2VlZ5tJJL3EzFtfg7g39J/h+8+DnNmHUnbykcQIDAQAB'
+, // Content of you private key
+	}
  }
 });
 
