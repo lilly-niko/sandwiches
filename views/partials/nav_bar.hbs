@@ -1,33 +1,33 @@
-<header class="header" id="header">
-    <nav class="nav container">
-
-        <div class="nav__menu" id="nav-menu">
-            <ul class="nav__list">
-                <li class="nav__item">
-                    <a href="/clients" class="nav__link">Клиенти</a>
-                </li>
-
-                <li class="nav__item">
-                    <a href="/objects" class="nav__link">Обекти</a>
-                </li>
-                
-                <li class="nav__item">
-                    <a href="/debt" class="nav__link">Задължения</a>
-                </li>
-            </ul>
-
-            <!-- Close button -->
-            <div class="nav__close" id="nav-close">
-                <i class="ri-close-line"></i>
-            </div>
-        </div>
-
-       
-        <!-- Toggle button -->
-        <div class="nav__toggle" id="nav-toggle">
-            <i class="ri-menu-line"></i>
-        </div>
-        
+ <header class="header">
+      <nav>
+        <i></i>
+        <i class="ri-menu-line" id="ham-menu"></i>
+        <ul id="nav-bar">
+            <li>
+                <a href="/clients">Клиенти</a>
+            </li>
+            <li>
+                <a href="/objects">Обекти</a>
+            </li>
+            <li>
+                <a href="/debt">Задължения</a>
+            </li>
+        </ul>
     </nav>
+    </header>
+    <script>
+        let hamMenuIcon = document.getElementById("ham-menu");
+let navBar = document.getElementById("nav-bar");
+let navLinks = navBar.querySelectorAll("li");
 
-</header>
+hamMenuIcon.addEventListener("click", () => {
+  navBar.classList.toggle("active");
+  hamMenuIcon.classList.toggle("fa-times");
+});
+navLinks.forEach((navLinks) => {
+  navLinks.addEventListener("click", () => {
+    navBar.classList.remove("active");
+    hamMenuIcon.classList.toggle("fa-times");
+  });
+});
+    </script>

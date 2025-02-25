@@ -7,62 +7,62 @@
         integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
         crossorigin="anonymous"></script>
-  <!-- Data Table CSS -->
-  
+    <!-- Data Table CSS -->
+
     <script src='https://cdn.datatables.net/2.0.7/js/dataTables.js'></script>
     <script src='https://cdn.datatables.net/buttons/3.0.2/js/dataTables.buttons.js'></script>
     <script src='https://cdn.datatables.net/buttons/3.0.2/js/buttons.dataTables.js'></script>
     <script src='https://cdn.datatables.net/select/2.0.2/js/dataTables.select.js'></script>
-     <script src='https://cdn.datatables.net/select/2.0.2/js/select.dataTables.js'></script>
-     
-    <link rel='stylesheet' href='https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css'>
-      <link rel='stylesheet' href='https://cdn.datatables.net/buttons/3.0.2/css/buttons.dataTables.css'>
-      <link rel='stylesheet' href='https://cdn.datatables.net/select/2.0.3/css/select.dataTables.css'>
+    <script src='https://cdn.datatables.net/select/2.0.2/js/select.dataTables.js'></script>
 
-   <script type="text/javascript" src="/test.js"></script>
+    <link rel='stylesheet' href='https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css'>
+    <link rel='stylesheet' href='https://cdn.datatables.net/buttons/3.0.2/css/buttons.dataTables.css'>
+    <link rel='stylesheet' href='https://cdn.datatables.net/select/2.0.3/css/select.dataTables.css'>
+
+    <script type="text/javascript" src="/test.js"></script>
     <link rel="stylesheet" href="/style.css" type="text/css">
-    
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/css/bootstrap-select.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/bootstrap-select.min.js"></script>
+
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
     <style>
         .disabled {
-  opacity: 0.3;
-  cursor: not-allowed !important;
-    }
+            opacity: 0.3;
+            cursor: not-allowed !important;
+        }
     </style>
-   
+
 </head>
 
 <body>
-      {{>nav_bar}}
+    {{>nav_bar}}
     <div class="content">
         <div class="card" style="  padding: 25px;">
             <div class="content-panel">
                 <div class="content-header-wrapper">
-                   
+
                     <h2 class="title">Обект</h2>
 
                     {{>info}}
-                  
+
                 </div>
-                
-                    {{>view_objects}}
-             
+
+                {{>view_objects}}
+
             </div>
         </div>
     </div>
-    <div id="addTaskModal" class="modal fade">
+    <div id="addTaskModal" class="modal">
         <div class="modal-dialog" style="width: 600px">
             <div class="modal-content">
                 <form method="post" action="/addObject">
                     <div class="modal-header">
                         <h4 class="modal-title">Добавяне на обект</h4>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
-                    </div>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        </div>
                     <div class="modal-body">
                         <div class="user-details">
                             <div class="input-box">
@@ -73,22 +73,26 @@
                                     {{/each}}
                                 </select>
                             </div>
-                             <div class="input-box">
-                            <label>ID на обект</label>
-                            <input type="text"  id="object_id" name="object_id" placeholder="Въведете ID на обект" required>
-                        </div>
-                        <div class="input-box">
-                            <label>Адрес на обект</label>
-                            <input type="text"  id="object_address" name="object_address" placeholder="Въведете адрес" required>
-                        </div>
+                            <div class="input-box">
+                                <label>ID на обект</label>
+                                <input type="text" id="object_id" name="object_id" placeholder="Въведете ID на обект"
+                                    required>
+                            </div>
+                            <div class="input-box">
+                                <label>Адрес на обект</label>
+                                <input type="text" id="object_address" name="object_address"
+                                    placeholder="Въведете адрес" required>
+                            </div>
                             <div class="input-box">
                                 <span class="details">Базова месечна тарифа(без ДДС)</span>
-                                <input type="number"  id="monthly_tax" name="monthly_tax" placeholder="Въведете месечна тарифа" required>
+                                <input type="number" id="monthly_tax" name="monthly_tax"
+                                    placeholder="Въведете месечна тарифа" required>
                             </div>
-                             <div class="input-box" style='flex-basis: 100%;'>
-                            <label>Лица за контакт и допълнителни коментари</label>
-                            <textarea rows="2"  id="info" name="info" placeholder="Въведете допълнителна информация" required></textarea>
-                        </div>
+                            <div class="input-box" style='flex-basis: 100%;'>
+                                <label>Лица за контакт и допълнителни коментари</label>
+                                <textarea rows="2" id="info" name="info" placeholder="Въведете допълнителна информация"
+                                    required></textarea>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -99,7 +103,7 @@
             </div>
         </div>
     </div>
-    <div id="editContragentsModal" class="modal fade">
+    <div id="editContragentsModal" class="modal">
         <div class="modal-dialog" style="width: 600px">
             <div class="modal-content">
                 <form method="post" action="/editClient">
@@ -125,24 +129,24 @@
                                 <span class="details">Име</span>
                                 <input type="text" id="name_edit" name="name_edit" required>
                             </div>
-                               <div class="input-box">
+                            <div class="input-box">
                                 <span class="details">Адрес</span>
-                                <input type="text" id="address_edit" name="address_edit" required >
+                                <input type="text" id="address_edit" name="address_edit" required>
                             </div>
-                               <div class="input-box">
+                            <div class="input-box">
                                 <span class="details">МОЛ</span>
-                                <input type="text" id="mol_edit" name="mol_edit" required >
+                                <input type="text" id="mol_edit" name="mol_edit" required>
                             </div>
                             <div class="input-box">
                                 <span class="details">Имейл</span>
-                                <input type="text" id="email_edit" name="email_edit"required >
+                                <input type="text" id="email_edit" name="email_edit" required>
                             </div>
                             <div class="input-box">
                                 <span class="details">Телефон</span>
                                 <input type="text" id="phone_edit" name="phone_edit" required>
                             </div>
-                               <input type="text" id="id_edit" name="id_edit" hidden >
-                            
+                            <input type="text" id="id_edit" name="id_edit" hidden>
+
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -153,56 +157,56 @@
             </div>
         </div>
     </div>
-    
+
     <script>
-    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+        const tooltipTriggerList = document.querySelectorAll('[data-toggle="tooltip"]');
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 
-    async function generatePdfList(filtered, spinHandle,table) {
-    const response = await fetch("/get_file_data?table="+table+"&array=" + filtered ,{
-    method: "GET",
-    headers: {
-      "Content-type": "application/json",
-    }
-  });
+        async function generatePdfList(filtered, spinHandle, table) {
+            const response = await fetch("/get_file_data?table=" + table + "&array=" + filtered, {
+                method: "GET",
+                headers: {
+                    "Content-type": "application/json",
+                }
+            });
 
-  const json = await response.json(); // create a new Blob object.
-  console.log("ready");
-  loadingOverlay().cancel(spinHandle);
-  const files=json.file_data;
-  function download_next(i) {
-    if (i >= files.length) {
-      return;
-    }
-    var a = document.createElement('a');
+            const json = await response.json(); // create a new Blob object.
+            console.log("ready");
+            loadingOverlay().cancel(spinHandle);
+            const files = json.file_data;
+            function download_next(i) {
+                if (i >= files.length) {
+                    return;
+                }
+                var a = document.createElement('a');
 
-    const arr = Uint8Array.from(files[i].file_data.data);
-    const decoder = new TextDecoder();
-    const str = decoder.decode(arr);
-    a.href = str;
-    // Use a.download if available, it prevents plugins from opening.
-    if ('download' in a) {
-      a.download = files[i].file_name;
-    }
-    // Add a to the doc for click to work.
-    (document.body || document.documentElement).appendChild(a);
-    if (a.click) {
-      a.click();// The click method is supported by most browser.
-    } else {
-      $(a).click(); // Backup using jquery
-    }
-    // Delete the temporary link.
-    a.parentNode.removeChild(a);
-    // Download the next file with a small timeout. The timeout is necessary
-    // for IE, which will otherwise only download the first file.
-    setTimeout(function() {
-      download_next(i + 1);
-    }, 500);
-  }
-  // Initiate the first download.
-  download_next(0);
-}
-</script>
+                const arr = Uint8Array.from(files[i].file_data.data);
+                const decoder = new TextDecoder();
+                const str = decoder.decode(arr);
+                a.href = str;
+                // Use a.download if available, it prevents plugins from opening.
+                if ('download' in a) {
+                    a.download = files[i].file_name;
+                }
+                // Add a to the doc for click to work.
+                (document.body || document.documentElement).appendChild(a);
+                if (a.click) {
+                    a.click();// The click method is supported by most browser.
+                } else {
+                    $(a).click(); // Backup using jquery
+                }
+                // Delete the temporary link.
+                a.parentNode.removeChild(a);
+                // Download the next file with a small timeout. The timeout is necessary
+                // for IE, which will otherwise only download the first file.
+                setTimeout(function () {
+                    download_next(i + 1);
+                }, 500);
+            }
+            // Initiate the first download.
+            download_next(0);
+        }
+    </script>
 </body>
 
 </html>

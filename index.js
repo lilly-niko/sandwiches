@@ -9,6 +9,40 @@ const fs = require("fs");
 const bcrypt = require('bcryptjs');
 var session = require('express-session');
 const flash = require('express-flash');
+const Email = require('email-templates');
+
+const email = new Email({
+ message: {
+   from: 'no_reply_sot@teradev.eu'
+ },
+ send: true,
+ transport: {
+  service: 'postfix',
+  host: 'localhost',
+  secure: true,
+  port: 995,
+  auth: { user: 'no_reply_sot@teradev.eu', pass: 'citadela' },
+  tls: { rejectUnauthorized: true }
+ }
+});
+
+const people = [
+ {number: '001', date:'25.02.2025', value: '25.99'},
+ {number: '002', date:'25.02.2025', value: '55.00'}
+];
+
+people.forEach((person) => {
+ email
+   .send({
+     template: 'debt_message',
+     message: {
+       to: 'aasergyy@gmail.com'
+     },
+     locals: person
+   })
+   .then(console.log)
+   .catch(console.error);
+})
 
 
 dotenv.config({ path: './.env' }); // as we dont want to share our database user and pass so .env ( we can name it as any like xyz.env its just it should have extension of .env)
@@ -184,7 +218,7 @@ hbs.registerHelper('cropsTable', function (crops, areas) {
 //creating connection with our databae
 const db = mysql.createConnection({
   host: "localhost",
-  user: "bioagent_root", // my username
+  user: "root", // my username
   password: "Tarator@98", // my password
   database: "bioagent_sandwiches",
   dateStrings: "true",
