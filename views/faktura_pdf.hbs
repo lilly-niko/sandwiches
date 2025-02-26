@@ -1,0 +1,187 @@
+<html>
+
+<head>
+    <title>Print it!</title>
+    <link rel="stylesheet" type="text/css" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.css">
+    <link rel="stylesheet" href="/pdf.css" media="all">
+</head>
+
+<body>
+    <header class="clearfix">
+        <div style="align-content: center;
+    text-align: center;">
+            <h1>Фактура
+            </h1>
+            <h4 style="font-style:italic;">Оригинал</h4>
+        </div>
+        <div style="display: flex;
+    justify-content: flex-end;">
+            <div style="display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: end;
+    width: 33%;
+    font-size: 0.9rem;
+    margin: 10px;
+    gap: 5px;">
+                <div>Номер:</div>
+                <div style="font-weight:bold;">{{this.number}}1</div>
+                <div>Дата:</div>
+                <div style="font-weight: bold;">{{this.date}}1</div>
+            </div>
+        </div>
+    </header>
+
+    <section>
+        <div style="display:grid; grid-template-columns:1.5fr 1fr;column-gap:8px; margin-bottom: 15px;">
+            <div class="info" style="grid-template-columns: 1fr 5.5fr;">
+                <div>Получател</div>
+                <div>test</div>
+                <div>ДДС № </div>
+                <div>0958530358</div>
+                <div>Идент. № </div>
+                <div></div>
+                <div>Град </div>
+                <div></div>
+                <div>Адрес </div>
+                <div></div>
+                <div>МОЛ </div>
+                <div></div>
+                <div>Телефон </div>
+                <div></div>
+            </div>
+
+            <div class="info">
+                <div>Доставчик</div>
+                <div>Експрес Секюрити СОД-ЕООД</div>
+                <div>ДДС № </div>
+                <div>BG114540185</div>
+                <div>Идент. № </div>
+                <div>114540185</div>
+                <div>Град </div>
+                <div>Плевен</div>
+                <div>Адрес </div>
+                <div>ул. "Вардар" 15</div>
+                <div>МОЛ</div>
+                <div>Десислава Иванова</div>
+                <div>Телефон</div>
+                <div>805 678</div>
+            </div>
+
+
+        </div>
+        <div class="table-wrapper">
+            <table>
+                <tbody class="head">
+                    <tr>
+                        <th>№</th>
+                        <th>Код</th>
+                        <th>
+                            <div>Наименование на стокатa/услугатa</div>
+                        </th>
+                        <th>
+                            <div>Мярка</div>
+                        </th>
+                        <th>
+                            <div>Количество</div>
+                        </th>
+                        <th>
+                            <div>Цена</div>
+                        </th>
+                        <th>
+                            <div>Сума</div>
+                        </th>
+                    </tr>
+
+                </tbody>
+                <tbody class="body">
+                    <tr>
+                        <td class="idnt">1</td>
+                        <td class=""></td>
+                        <td class="">Такса охрана СОД м.октомви-м.декемви Ема</td>
+                        <td></td>
+                        <td class="num">6.00</td>
+                        <td class="num">30.00</td>
+                        <td class="num to_sum">180.00</td>
+                    </tr>
+                    <tr>
+                        <td class="idnt">2</td>
+                        <td class=""></td>
+                        <td class="quantity">Такса охрана СОД м.октомви-м.декемви Ема</td>
+                        <td></td>
+                        <td class="num">6.00</td>
+                        <td class="num">90.00</td>
+                        <td class="num to_sum">540.00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="display: flex;
+    justify-content: flex-end;">
+            <div style="display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: end;
+    width: 33%;
+    font-size: 0.9rem;
+    margin: 10px;
+    gap: 5px;">
+                <div>Данъчна основа:</div>
+                <div>1</div>
+                <div>ДДС 20%:</div>
+                <div>{{this.date}}1</div>
+                <div style="font-weight:bold;">Сума за плащане:</div>
+                <div style="font-weight:bold;">{{this.number}}2</div>
+            </div>
+        </div>
+        <div style="display: grid;
+    grid-template-columns: 1.3fr 1fr;padding-top:10px">
+     <div class="details">
+                <div>Дата на данъчно събитие:</div>
+                <div></div>
+                <div>Основание на сделката:</div>
+                <div></div>
+                <div>Описание на сделката:</div>
+                <div></div>
+                <div>Място на сделката:</div>
+                <div>Плевен</div>
+            </div>
+             <div class="details" style="grid-template-columns: 1fr 2fr;">
+                <div>Плащане:</div>
+                <div></div>
+                <div>IBAN:</div>
+                <div></div>
+                <div>Банка:</div>
+                <div></div>
+                <div>Банков код:</div>
+                <div></div>
+            </div>
+        <div class="details" style="font-style:italic;
+    grid-template-columns: 1fr 6fr;
+">
+                <div>Получил:</div>
+                <div>бла фкдф</div>
+        </div>
+        <div class="details" style="font-style:italic;
+    grid-template-columns: 1fr 6fr;
+">
+                <div >Съставил:</div>
+                <div>Петър Дражев</div>
+        </div>
+          
+
+
+        </div>
+
+    </section>
+    <footer>
+        <div class="container">
+            <div class="notice">
+                <div><i class="ri-map-pin-2-fill"></i>5500 гр.Ловеч, бул. "България" №1 </div>
+                <div><i class="ri-phone-fill"></i> +359 890 915 060 </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>
