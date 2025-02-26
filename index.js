@@ -280,7 +280,7 @@ hbs.registerHelper('cropsTable', function (crops, areas) {
 //creating connection with our databae
 const db = mysql.createConnection({
   host: "localhost",
-  user: "root", // my username
+  user: "bioagent_root", // my username
   password: "Tarator@98", // my password
   database: "bioagent_sandwiches",
   dateStrings: "true",
