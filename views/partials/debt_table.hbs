@@ -4,7 +4,9 @@
             <th><input type="checkbox" name="select_all" value="1" id="history-select-all"></th>
             <th>Име на клиент</th>
             <th>Дата на задължение</th>
+            <th>Период</th>
             <th>Дължима сума</th>
+            <th>Статус</th>
             <th></th>
 
         </tr>
@@ -15,8 +17,25 @@
             <td class="td-data"> <input type="checkbox" name="id[]"></td>
             <td class="td-data">{{this.name}}</td>
             <td class="td-data">{{dateNew this.date_issued}}</td>
+            <td></td>
             <td class="td-data">{{this.sum_to_pay}}</td>
-            <td class="td-data"></td>
+            <td></td>
+            <td class="td-data">
+                <ul class="utilities list-inline">
+                    <li style="padding-left: 5px;">
+                        <span onclick="showInvoice()">
+                            <button class="btn btn-primary" type="submit" id="order" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Преглед на фактура"><i class='bx bx-receipt'></i></button>
+                        </span>
+                    </li>
+                        <li style="padding-left: 5px;">
+                         <span onclick="sendEmail()"  data-bs-toggle="modal">
+                            <button class="btn btn-success" type="submit" id="task" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Отбелязване като платена" {{#if is_paid}}
+                             disabled
+                             {{/if}}><i class='bx bxs-calendar-check'></i></button>
+                        </span>
+                    </li>
+                </ul>
+            </td>
         </tr>
         {{/each}}
     </tbody>

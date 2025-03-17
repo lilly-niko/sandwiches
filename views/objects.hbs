@@ -103,10 +103,10 @@
             </div>
         </div>
     </div>
-    <div id="editContragentsModal" class="modal">
+    <div id="editObjectsModal" class="modal">
         <div class="modal-dialog" style="width: 600px">
             <div class="modal-content">
-                <form method="post" action="/editClient">
+                <form method="post" action="/editObject">
                     <div class="modal-header">
                         <h4 class="modal-title">Редактиране на данни за обект</h4>
                         <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
@@ -114,39 +114,33 @@
                     <div class="modal-body">
                         <div class="user-details">
                             <div class="input-box">
-                                <span class="details">Вид контрагент</span>
-                                <select class="type_select" id="type_edit" name="type_edit">
-                                    <option value="2">Производител</option>
-                                    <option value="1" selected>Доставчик</option>
-                                    <option value="0">Клиент</option>
+                                <span class="details">Клиент</span>
+                                <select class="type_select" id="client_id_edit" name="client_id_edit">
+                                    {{#each clients}}
+                                    <option value="{{this.id}}">{{this.name}}</option>
+                                    {{/each}}
                                 </select>
                             </div>
                             <div class="input-box">
-                                <span class="details">Булстат</span>
-                                <input type="text" id="bulstat_edit" name="bulstat_edit" required>
+                                <label>ID на обект</label>
+                                <input type="text" id="object_id_edit" name="object_id_edit" placeholder="Въведете ID на обект"
+                                    readonly>
                             </div>
                             <div class="input-box">
-                                <span class="details">Име</span>
-                                <input type="text" id="name_edit" name="name_edit" required>
+                                <label>Адрес на обект</label>
+                                <input type="text" id="object_address_edit" name="object_address_edit"
+                                    placeholder="Въведете адрес" required>
                             </div>
                             <div class="input-box">
-                                <span class="details">Адрес</span>
-                                <input type="text" id="address_edit" name="address_edit" required>
+                                <span class="details">Базова месечна тарифа(без ДДС)</span>
+                                <input type="number" id="monthly_tax_edit" name="monthly_tax_edit"
+                                    placeholder="Въведете месечна тарифа" required>
                             </div>
-                            <div class="input-box">
-                                <span class="details">МОЛ</span>
-                                <input type="text" id="mol_edit" name="mol_edit" required>
+                            <div class="input-box" style='flex-basis: 100%;'>
+                                <label>Лица за контакт и допълнителни коментари</label>
+                                <textarea rows="2" id="info_edit" name="info_edit" placeholder="Въведете допълнителна информация"
+                                    required></textarea>
                             </div>
-                            <div class="input-box">
-                                <span class="details">Имейл</span>
-                                <input type="text" id="email_edit" name="email_edit" required>
-                            </div>
-                            <div class="input-box">
-                                <span class="details">Телефон</span>
-                                <input type="text" id="phone_edit" name="phone_edit" required>
-                            </div>
-                            <input type="text" id="id_edit" name="id_edit" hidden>
-
                         </div>
                     </div>
                     <div class="modal-footer">
