@@ -202,6 +202,7 @@ hbs.registerHelper('splitAddress', function (address, num) {
 });
 //creating connection with our databae
 const db = mysql.createPool({
+const db = mysql.createPool({
   host: "localhost",
   user: "root", // my username
   password: "Tarator@98", // my password
