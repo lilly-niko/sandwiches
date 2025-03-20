@@ -5,9 +5,31 @@
     <link rel="stylesheet" type="text/css" href="/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.css">
     <link rel="stylesheet" href="/pdf.css" media="all">
+    <style>
+        .watermark {
+            color: lightgray;
+            font-size: 180px;
+            z-index: 1;
+            position: absolute;
+            bottom: 120px;
+            transform: rotate(300deg);
+            -webkit-transform: rotate(300deg);
+        }
+
+        section {
+           z-index: 10;
+    position: relative;
+        }
+         @page {
+            size: A4;
+            margin: 0%;
+            overflow: hidden;
+        }
+    </style>
 </head>
 
 <body>
+    <div class="watermark">ТEСТOВА</div>
     <header class="clearfix">
         <div style="align-content: center;
     text-align: center;">

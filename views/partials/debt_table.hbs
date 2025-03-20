@@ -3,8 +3,7 @@
         <tr>
             <th><input type="checkbox" name="select_all" value="1" id="history-select-all"></th>
             <th>Име на клиент</th>
-            <th>Дата на задължение</th>
-            <th>Период</th>
+            <th>Период на задължение</th>
             <th>Дължима сума</th>
             <th>Статус</th>
             <th></th>
@@ -13,26 +12,46 @@
     </thead>
     <tbody id="tableBody">
         {{#each data}}
-        <tr id="history-{{this.debt_id}}">
+        <tr id="history-{{this.debt_id}}-{{dateNew this.date_issued}}-{{this.email}}">
             <td class="td-data"> <input type="checkbox" name="id[]"></td>
             <td class="td-data">{{this.name}}</td>
-            <td class="td-data">{{dateNew this.date_issued}}</td>
-            <td></td>
-            <td class="td-data">{{this.sum_to_pay}}</td>
+            <td>м. {{get_month this.month}}</td>
+            <td class="td-data">{{priceFormat this.sum_to_pay}}</td>
             <td></td>
             <td class="td-data">
                 <ul class="utilities list-inline">
                     <li style="padding-left: 5px;">
                         <span onclick="showInvoice()">
-                            <button class="btn btn-primary" type="submit" id="order" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Преглед на фактура"><i class='bx bx-receipt'></i></button>
+                            <button class="btn btn-primary" type="submit" id="order" data-bs-toggle="tooltip"
+                                data-bs-placement="bottom" data-bs-title="Преглед на фактура"><i
+                                    class='bx bx-receipt'></i></button>
                         </span>
                     </li>
-                        <li style="padding-left: 5px;">
-                         <span onclick="sendEmail()"  data-bs-toggle="modal">
-                            <button class="btn btn-success" type="submit" id="task" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Отбелязване като платена" {{#if is_paid}}
-                             disabled
-                             {{/if}}><i class='bx bxs-calendar-check'></i></button>
+                    <li style="padding-left: 5px;">
+                        {{#unless is_checked}}<span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip"
+                            data-bs-placement="top" title="Моля прегледайте преди изпращане">{{/unless}}
+                            {{#if to_send}}<span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip"
+                                data-bs-placement="top" title="Вече е маркирана за изпращане">{{/if}}
+                                <button class="btn btn-success" type="submit" id="autosend_button"
+                                    onclick="markForSend()" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                    data-bs-title="Маркиране за автоматино плащане" {{#unless is_checked}} disabled
+                                    {{/unless}} {{#if to_send}} disabled {{/if}}><i
+                                        class='bx bx-mail-send'></i></button>
+                                {{#unless is_checked}}
+                            </span>
+                            {{/unless}}
+                            {{#if to_send}} </span>
+                        {{/if}}
+                    </li>
+                    <li style="padding-left: 5px;">
+                        {{#unless is_checked}}<span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip"
+                            data-bs-placement="top" title="Моля прегледайте преди изпращане">{{/unless}}
+                            <button class="btn btn-info" type="submit" id="send_button" data-bs-toggle="tooltip"
+                                data-bs-placement="bottom" data-bs-title="Изпращане" onclick="sendEmail()" {{#unless
+                                is_checked}} disabled {{/unless}}><i class='bx bx-send'></i></button>
+                            {{#unless is_checked}}
                         </span>
+                        {{/unless}}
                     </li>
                 </ul>
             </td>
@@ -45,6 +64,7 @@
             <th></th>
             <th></th>
             <th id="debtSumAll">0</th>
+            <th></th>
             <th></th>
         </tr>
     </tfoot>

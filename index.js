@@ -238,7 +238,7 @@ db.on('error', (err) => {
 let listOfIds = [];
 let generatePDFfromURL = async (id) => {
 
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] });
   const page = await browser.newPage();
   await page.goto('http://localhost:3007/faktura/' + id, { waitUntil: 'networkidle0' });
   const pdf = await page.pdf({ format: 'A4' });
@@ -262,17 +262,20 @@ async function processArray(array) {
     });
     const debt = await response.json();
     console.log(debt);
-    let pdf = await generatePDFfromURL(debt.debt_id);
-    row.pdf = pdf;
-    row.number = pad(debt.debt_id, 9);
-    var dateParts = debt.date_issued.split("-").reverse().join('.');
-    row.date = dateParts;
-    row.value = debt.sum_to_pay.toFixed(2);
-    console.log(row);
-    propertyList.push(row);
+    if (!debt.error) {
+      let pdf = await generatePDFfromURL(debt.debt_id);
+      row.pdf = pdf;
+      row.number = pad(debt.debt_id, 9);
+      var dateParts = debt.date_issued.split("-").reverse().join('.');
+      row.date = dateParts;
+      row.value = debt.sum_to_pay.toFixed(2);
+      console.log(row);
+      propertyList.push(row);
+    }
   }
   console.log("1: " + propertyList);
   return propertyList;
+
 }
 const email = new Email({
   message: {
@@ -297,8 +300,8 @@ const email = new Email({
   }
 });
 
-/*
-var cronJ = new cronJob("07 * * * *", function () {
+
+var cronJ = new cronJob("30 * * * *", function () {
   console.log("Tick");
   db.query("Select id,email from clients where TIMESTAMPDIFF(MONTH, last_issued_date, curdate()) = factura_period or last_issued_date is null;", async (err, result) => {
     if (err) {
@@ -308,7 +311,7 @@ var cronJ = new cronJob("07 * * * *", function () {
       console.log(listOfIds);
       let email_data = await processArray(listOfIds);
       console.log("2: " + email_data);
-      email_data.forEach((person) => {
+      /*email_data.forEach((person) => {
         email
           .send({
             template: 'debt_message',
@@ -327,21 +330,21 @@ var cronJ = new cronJob("07 * * * *", function () {
             console.log('res.originalMessage', res.originalMessage)
           })
           .catch(console.error);
-      })
+      })*/
     }
   });
 
-  /*transport.sendMail(mailOptions, (error, info) => {
-    if (error) {
-        return console.log(error);
-    }
-    console.log('Message sent: %s', info.messageId);
-});
-
+  /* transport.sendMail(mailOptions, (error, info) => {
+     if (error) {
+         return console.log(error);
+     }
+     console.log('Message sent: %s', info.messageId);
+ });
+ */
 
   console.log("end");
 }, undefined, true, "Europe/Sofia");
-*/
+
 /*
 
 (async () => {
@@ -397,7 +400,7 @@ var cronJ = new cronJob("07 * * * *", function () {
       .catch(console.error);
   })
 })()
-  */
+  
 /*async function printPDF() {
   const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
@@ -1245,6 +1248,35 @@ app.get('/faktura/:id', (req, res, next) => {
     }
   })
 });
+app.post('/view_faktura', (req, res) => {
+  const { id } = req.body;
+  const query = "Update debt set is_checked = 1 where debt_id= ?";
+  db.query(query, [id], (err, result) => {
+    if (err) {
+      // set flash message
+      console.log(err.sqlMessage);
+    } else {
+      // set flash message
+      console.log(result);
+      console.log(result.affectedRows);
+      return res.json({ url: "/faktura/" + id, is_changed: result.changedRows });
+    }
+  })
+});
+app.post('/mark_faktura', (req, res) => {
+  const { id } = req.body;
+  const query = "Update debt set to_send = 1 where debt_id= ?";
+  db.query(query, [id], (err, result) => {
+    if (err) {
+      // set flash message
+      console.log(err.sqlMessage);
+      return res.sendStatus(400);
+    } else {
+      // set flash message
+      return res.sendStatus(200);
+    }
+  })
+});
 app.get('/clients', checkLogin, (req, res, next) => {
   const query = "Select * from clients";
   db.query(query, (err, result) => {
@@ -1372,7 +1404,7 @@ app.post("/addObject", (req, res) => {
   });
 });
 app.get('/debt', (req, res, next) => {
-  const query = "Select debt.*, name from debt join clients on client_id= clients.id and is_paid=0;";
+  const query = "Select debt.*,month(date_issued) as month, name, email from debt join clients on client_id= clients.id order by clients.id desc;";
   db.query(query, (err, result) => {
     if (err) {
       console.log(err);
@@ -1383,11 +1415,38 @@ app.get('/debt', (req, res, next) => {
     }
   });
 });
+app.post('/sendMail', async (req, res) => {
+  const { debt_id, date_issued, sum_to_pay, email } = req.body;
+  let row = {};
+  let pdf = await generatePDFfromURL(debt_id);
+  row.number = pad(debt_id, 9);
+  row.date = date_issued;
+  row.value = sum_to_pay;
+  email
+    .send({
+      template: 'debt_message',
+      message: {
+        to: ['express_sot@abv.bg', 'lilia.a.nikolaeva@gmail.com', email],
+        attachments: [
+          {   // utf-8 string as an attachment
+            filename: 'factura_'+row.number+'.pdf',
+            content: Buffer.from(pdf)
+          }
+        ]
+      },
+      locals: row
+    })
+    .then((res) => {
+      console.log('res.originalMessage', res.originalMessage)
+    })
+    .catch(console.error);
+});
 app.post("/createDebt", (req, res) => {
   const { client_id } = req.body;
   db.query('INSERT INTO debt SET ?;', { client_id: client_id }, (error, result) => {
     if (error) {
       console.log(error.sqlMessage);
+      return res.json({ error: error.sqlMessage });
     } else {
       db.query('select * from debt where debt_id= ?;', [result.insertId], (error, debt_info) => {
         if (error) {

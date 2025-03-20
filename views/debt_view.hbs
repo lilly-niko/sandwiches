@@ -48,6 +48,20 @@
         #history tr:not(.dtrg-group) {
             background-color: rgba(0, 0, 0, 0.20) !important;
         }
+
+        .btn {
+            padding: 0px 4px !important;
+        }
+
+
+        .d-inline-block {
+            /* OPTIONAL pointer-events setting above blocks cursor setting, so set it here */
+            cursor: not-allowed;
+        }
+
+        .btn.btn-success[disabled] {
+            color: #000;
+        }
     </style>
 </head>
 
@@ -76,7 +90,7 @@
         $(document).ready(function () {
             var table = $('#history').DataTable({
                 'columnDefs': [{
-                    'targets': [0, 4],
+                    'targets': [0, 5],
                     'searchable': false,
                     'orderable': false,
                     'className': 'dt-body-center',
@@ -136,7 +150,7 @@
                         var debtSum = rows
                             .data()
                             .pluck(3)
-                            .sum();
+                            .sum().toFixed(2);
 
 
                         return $('<tr/>')
@@ -145,7 +159,7 @@
                             .append('<td class="dt-left">' + group + ' (' + rows.count() + ' задължения)</td>')
                             .append('<td></td>')
                             .append('<td class="dt-right">' + debtSum + '</td>')
-                            .append('<td></td>')
+                            .append('<td></td><td></td>')
                             .attr('data-name', group)
                             .toggleClass('collapsed', collapsed);
                     }
@@ -208,14 +222,100 @@
                 document.getElementById('debtSumAll').innerText = debtSum;
 
             });
+
         });
-        function showInvoice() {
-            var rowdata = event.target.parentNode.closest('tr');
-            console.log(rowdata);
-            //this gives id of tr whose button was clicked
-            /*returns array of all elements with "td-data"" class within the row with given id*/
-           location.href = "http://localhost:3007/faktura/14";
+        async function showInvoice() {
+            var rowdata = event.target.parentNode.closest('tr').id;
+            var rowId = rowdata.split('-')[1];
+            fetch('/view_faktura', {
+                method: 'post',
+                body: JSON.stringify({
+                    id: rowId
+                }),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            }).then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                    window.open(data.url, '_blank').focus();
+                    if (data.is_changed) {
+                        let tr = document.getElementById(rowdata);
+                        let innerDAta = tr.cells.item(5);
+                        var li1 = innerDAta.getElementsByTagName('li')[1];
+                        var li2 = innerDAta.getElementsByTagName('li')[2];
+                        li1.innerHTML = ` <button class="btn btn-success" type="submit" id="autosend_button" onclick="markForSend()"
+                                data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                data-bs-title="Маркиране за автоматино плащане"><i class='bx bx-mail-send'></i></button>`;
+                        li2.innerHTML = `<button class="btn btn-info" type="submit" id="send_button" data-bs-toggle="tooltip"
+                                data-bs-placement="bottom" data-bs-title="Изпращане" onclick="sendEmail()"
+                                data-bs-toggle="modal"><i
+                                    class='bx bx-send'></i></button>`;
+                        //var tooltip = new bootstrap.Tooltip(li1.getElementsByTagName('button')[0]);
+                        var tooltipLst = [li1.getElementsByTagName('button')[0], li2.getElementsByTagName('button')[0]].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+                    }
+                }
+                )
+            //location.href = "http://localhost:3007/view_faktura/" + rowId;
         };
+        async function markForSend() {
+            var tooltip1 = bootstrap.Tooltip.getInstance(event.currentTarget);
+            await tooltip1.hide();
+            var rowdata = event.currentTarget.closest('tr').id;
+            var rowId = rowdata.split('-')[1];
+            console.log(rowId);
+            fetch('/mark_faktura', {
+                method: 'post',
+                body: JSON.stringify({
+                    id: rowId
+                }),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            }).then(async response => {
+                if (response.ok) {
+                    let tr = document.getElementById(rowdata);
+                    let innerDAta = tr.cells.item(5);
+                    var li1 = innerDAta.getElementsByTagName('li')[1];
+                    li1.innerHTML = `<span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip"  data-bs-placement="top"
+                            title="Вече е маркирана за изпращане">
+                            <button class="btn btn-success" type="submit" id="autosend_button" onclick="markForSend()"
+                                 data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                data-bs-title="Маркиране за автоматино плащане" disabled
+                                ><i class='bx bx-mail-send'></i></button>
+                        </span>`;
+                    var tooltip = new bootstrap.Tooltip(li1.getElementsByTagName('button')[0]);
+                    //var tooltipLst = [li1.getElementsByTagName('button')[0],li2.getElementsByTagName('button')[0]].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+
+                }
+            }
+            )
+            //location.href = "http://localhost:3007/view_faktura/" + rowId;
+        };
+        async function sendEmail() {
+            if (!confirm('Сигурни ли сте че искате да изпратите избраната фактура?')) {
+                e.preventDefault();
+            }
+            var rowdata = event.target.parentNode.closest('tr').id;
+            var rowId = rowdata.split('-')[1];
+            var date = rowdata.split('-')[2];
+            var email = rowdata.split('-')[3];
+            let tr = document.getElementById(rowdata);
+            fetch('/sendMail', {
+                method: 'post',
+                body: JSON.stringify({
+                    debt_id: rowId,
+                    date_issued: date,
+                    sum_to_pay: tr.cells.item(3).innerText,
+                    email: email
+                }),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            }).then((response) => console.log(response))
+            //location.href = "http://localhost:3007/view_faktura/" + rowId;
+        };
+
     </script>
     <script>
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
