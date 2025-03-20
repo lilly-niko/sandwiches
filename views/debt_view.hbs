@@ -62,6 +62,11 @@
         .btn.btn-success[disabled] {
             color: #000;
         }
+
+        .badge {
+            white-space: break-spaces !important;
+            max-width: 100px;
+        }
     </style>
 </head>
 
@@ -97,8 +102,12 @@
                     'width': "20px"
                 },
                 {
+                    'targets': [4],
+                    'className': 'dt-body-center'
+                },
+                 {
                     'targets': [1, 2, 3],
-                    'className': 'dt-left'
+                    'className': 'dt-center'
                 }
                 ],
                 'order': [],
@@ -307,7 +316,7 @@
                     debt_id: rowId,
                     date_issued: date,
                     sum_to_pay: tr.cells.item(3).innerText,
-                    email: email
+                    mail: email
                 }),
                 headers: {
                     "Content-type": "application/json; charset=UTF-8"

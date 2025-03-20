@@ -147,22 +147,20 @@ hbs.registerHelper('priorityConvert', function (priority) {
       return '<i data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Висок " class="ri-arrow-up-double-fill ri-2x" style="color:orange;"></i>';
   }
 });
-hbs.registerHelper('statusLabConvert', function (status) {
+hbs.registerHelper('statusMailConvert', function (status) {
   switch (status) {
     case 0:
-      return "<span style= 'color:white;' class='badge bg-secondary'>Незапочната</span>";
+      return "<span style= 'color:white;' class='badge bg-warning'>Непрегледана</span>";
     case 1:
-      return "<span style= 'color:white;' class='badge bg-warning'>Потвърдена </span>";
+      return "<span style= 'color:white;' class='badge bg-dark'>Неодобрена</span>";
     case 2:
-      return "<span style= 'color:white;' class='badge bg-success'>Готова за вземане</span>";
+      return "<span style= 'color:white;' class='badge bg-info'>Насрочена за изпращане</span>";
     case 3:
-      return '<span style= "color:white;" class="badge bg-info">Приета логистик</span>';
+      return '<span style= "color:white;" class="badge bg-primary">Изпратена</span>';
     case 4:
-      return '<span style= "color:white;" class="badge bg-primary">Пътува</span>';
+      return '<span style= "color:white;" class="badge bg-success">Платена</span>';
     case 5:
-      return '<span style= "color:white;" class="badge bg-success">Доставена </span>';
-    default:
-      return '<span style= "color:white;" class="badge bg-danger">Незададена </span>';
+      return '<span style= "color:white;" class="badge bg-danger">Просрочена </span>';
   }
 });
 hbs.registerHelper('statusConvert', function (status) {
@@ -203,7 +201,7 @@ hbs.registerHelper('splitAddress', function (address, num) {
 //creating connection with our databae
 const db = mysql.createPool({
   host: "localhost",
-  user: "bioagent_root", // my username
+  user: "root", // my username
   password: "Tarator@98", // my password
   database: "bioagent_sandwiches",
   dateStrings: "true",
@@ -301,7 +299,7 @@ const email = new Email({
 });
 
 
-var cronJ = new cronJob("30 * * * *", function () {
+var cronJ = new cronJob("42 22 20 * *", function () {
   console.log("Tick");
   db.query("Select id,email from clients where TIMESTAMPDIFF(MONTH, last_issued_date, curdate()) = factura_period or last_issued_date is null;", async (err, result) => {
     if (err) {
@@ -345,6 +343,55 @@ var cronJ = new cronJob("30 * * * *", function () {
   console.log("end");
 }, undefined, true, "Europe/Sofia");
 
+var cronJSend = new cronJob("00 06 21 * *", function () {
+  console.log("Tick");
+  db.query("Select debt_id as number,email,sum_to_pay as value ,last_issued_date as date from clients join debt on clients.id= debt.client_id where to_send=1 and fak_status != 3;", async (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(result);
+      for await (let row of result) {
+        let pdf = await generatePDFfromURL(row.number);
+        row.number = pad(row.number, 9);
+        email
+          .send({
+            template: 'debt_message',
+            message: {
+              to: ['express_sot@abv.bg', 'lilia.a.nikolaeva@gmail.com', row.email],
+              attachments: [
+                {   // utf-8 string as an attachment
+                  filename: 'factura_' + row.number + '.pdf',
+                  content: Buffer.from(pdf)
+                }
+              ]
+            },
+            locals: row
+          })
+          .then((res) => {
+            console.log('res.originalMessage', res.originalMessage);
+            db.query('update debt set fak_status =3 where debt_id= ?;', [row.number], (error, result) => {
+              if (error) {
+                console.log('error');
+              } else {
+                console.log("sent");
+              }
+            })
+          })
+          .catch(console.error);
+      }
+    }
+  });
+
+  /* transport.sendMail(mailOptions, (error, info) => {
+     if (error) {
+         return console.log(error);
+     }
+     console.log('Message sent: %s', info.messageId);
+ });
+ */
+
+  console.log("end");
+}, undefined, true, "Europe/Sofia");
 /*
 
 (async () => {
@@ -1250,7 +1297,7 @@ app.get('/faktura/:id', (req, res, next) => {
 });
 app.post('/view_faktura', (req, res) => {
   const { id } = req.body;
-  const query = "Update debt set is_checked = 1 where debt_id= ?";
+  const query = "Update debt set is_checked = 1, fak_status=1 where debt_id= ?";
   db.query(query, [id], (err, result) => {
     if (err) {
       // set flash message
@@ -1265,7 +1312,7 @@ app.post('/view_faktura', (req, res) => {
 });
 app.post('/mark_faktura', (req, res) => {
   const { id } = req.body;
-  const query = "Update debt set to_send = 1 where debt_id= ?";
+  const query = "Update debt set to_send = 1, fak_status =2 where debt_id= ?";
   db.query(query, [id], (err, result) => {
     if (err) {
       // set flash message
@@ -1347,7 +1394,7 @@ app.post("/addClient", (req, res) => {
     }
   });
 });
-app.get('/objects',checkLogin, (req, res, next) => {
+app.get('/objects', checkLogin, (req, res, next) => {
   const query = "Select objects.*, name from objects join clients on objects.client_id= clients.id;";
   db.query(query, (err, result) => {
     if (err) {
@@ -1406,7 +1453,7 @@ app.post("/addObject", (req, res) => {
     }
   });
 });
-app.get('/debt',checkLogin, (req, res, next) => {
+app.get('/debt', checkLogin, (req, res, next) => {
   const query = "Select debt.*,month(date_issued) as month, name, email from debt join clients on client_id= clients.id order by clients.id desc;";
   db.query(query, (err, result) => {
     if (err) {
@@ -1422,7 +1469,7 @@ app.use('/debt', function (err, req, res, next) {
   res.redirect('/');
 });
 app.post('/sendMail', async (req, res) => {
-  const { debt_id, date_issued, sum_to_pay, email } = req.body;
+  const { debt_id, date_issued, sum_to_pay, mail } = req.body;
   let row = {};
   let pdf = await generatePDFfromURL(debt_id);
   row.number = pad(debt_id, 9);
@@ -1432,10 +1479,10 @@ app.post('/sendMail', async (req, res) => {
     .send({
       template: 'debt_message',
       message: {
-        to: ['express_sot@abv.bg', 'lilia.a.nikolaeva@gmail.com', email],
+        to: ['express_sot@abv.bg', 'lilia.a.nikolaeva@gmail.com', mail],
         attachments: [
           {   // utf-8 string as an attachment
-            filename: 'factura_'+row.number+'.pdf',
+            filename: 'factura_' + row.number + '.pdf',
             content: Buffer.from(pdf)
           }
         ]
@@ -1443,7 +1490,14 @@ app.post('/sendMail', async (req, res) => {
       locals: row
     })
     .then((res) => {
-      console.log('res.originalMessage', res.originalMessage)
+      console.log('res.originalMessage', res.originalMessage);
+      db.query('update debt set fak_status =3 where debt_id= ?;', [debt_id], (error, result) => {
+        if (error) {
+          return res.sendStatus(400);
+        } else {
+          return res.sendStatus(200);
+        }
+      })
     })
     .catch(console.error);
 });
