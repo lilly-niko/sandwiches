@@ -1291,7 +1291,7 @@ app.get('/clients', checkLogin, (req, res, next) => {
 });
 app.use('/clients', function (err, req, res, next) {
   res.redirect('/');
-})
+});
 app.post("/addClient", (req, res) => {
   let { bulstat, name, type, address, phone, email, mol, factura_date, factura_period, object_id, object_address, monthly_tax, dds, dds_num, payment_type } = req.body;
   if (typeof object_id === "undefined") {
@@ -1347,7 +1347,7 @@ app.post("/addClient", (req, res) => {
     }
   });
 });
-app.get('/objects', (req, res, next) => {
+app.get('/objects',checkLogin, (req, res, next) => {
   const query = "Select objects.*, name from objects join clients on objects.client_id= clients.id;";
   db.query(query, (err, result) => {
     if (err) {
@@ -1369,6 +1369,9 @@ app.get('/objects', (req, res, next) => {
       });
     }
   });
+});
+app.use('/objects', function (err, req, res, next) {
+  res.redirect('/');
 });
 app.post("/addObject", (req, res) => {
   let { client_id, object_id, object_address, info, monthly_tax } = req.body;
@@ -1403,7 +1406,7 @@ app.post("/addObject", (req, res) => {
     }
   });
 });
-app.get('/debt', (req, res, next) => {
+app.get('/debt',checkLogin, (req, res, next) => {
   const query = "Select debt.*,month(date_issued) as month, name, email from debt join clients on client_id= clients.id order by clients.id desc;";
   db.query(query, (err, result) => {
     if (err) {
@@ -1414,6 +1417,9 @@ app.get('/debt', (req, res, next) => {
       });
     }
   });
+});
+app.use('/debt', function (err, req, res, next) {
+  res.redirect('/');
 });
 app.post('/sendMail', async (req, res) => {
   const { debt_id, date_issued, sum_to_pay, email } = req.body;
