@@ -299,7 +299,7 @@ const email = new Email({
 });
 
 
-var cronJ = new cronJob("42 22 20 * *", function () {
+var cronJ = new cronJob("00 22 6 * *", function () {
   console.log("Tick");
   db.query("Select id,email from clients where TIMESTAMPDIFF(MONTH, last_issued_date, curdate()) = factura_period or last_issued_date is null;", async (err, result) => {
     if (err) {
@@ -343,7 +343,7 @@ var cronJ = new cronJob("42 22 20 * *", function () {
   console.log("end");
 }, undefined, true, "Europe/Sofia");
 
-var cronJSend = new cronJob("00 06 21 * *", function () {
+var cronJSend = new cronJob("00 06 08 * *", function () {
   console.log("Tick");
   db.query("Select debt_id as number,email,sum_to_pay as value ,last_issued_date as date from clients join debt on clients.id= debt.client_id where to_send=1 and fak_status != 3;", async (err, result) => {
     if (err) {
@@ -369,7 +369,7 @@ var cronJSend = new cronJob("00 06 21 * *", function () {
           })
           .then((res) => {
             console.log('res.originalMessage', res.originalMessage);
-            db.query('update debt set fak_status =3 where debt_id= ?;', [row.number], (error, result) => {
+            db.query('update debt set fak_status = 3 where debt_id= ?;', [row.number], (error, result) => {
               if (error) {
                 console.log('error');
               } else {
@@ -1394,6 +1394,80 @@ app.post("/addClient", (req, res) => {
     }
   });
 });
+app.post("/deleteObject/:id", (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+  const query = "delete From objects Where id = ?";
+  db.query(query, [id], (err, result) => {
+    if (err) {
+      // set flash message
+      console.log(err.sqlMessage);
+      req.flash('error', err.sqlMessage);
+      // redirect to user page
+      return res.sendStatus(400);
+    } else {
+      // set flash message
+      //req.flash('success', 'Записът е успешно изтрит!');
+      // redirect to user page
+      return res.sendStatus(200);
+    }
+  })
+});
+
+app.post("/editObject", (req, res) => {
+  const { object_id_edit, object_address_edit, monthly_tax_edit, info_edit } = req.body;
+ 
+  db.query('Update objects SET ? where id=' + object_id_edit, { address: object_address_edit, tax: monthly_tax_edit, info: info_edit}, (error, result) => {
+    if (error) {
+      // set flash message
+      req.flash('error', error.sqlMessage);
+      // redirect to user page
+      return res.redirect('/objects');
+    } else {
+      // set flash message
+      req.flash('success', 'Записът е успешно променен!');
+      // redirect to user page
+      return res.redirect('/objects');
+    }
+  });
+});
+app.post("/deleteClient/:id", (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+  const query = "delete From clients Where id = ?";
+  db.query(query, [id], (err, result) => {
+    if (err) {
+      // set flash message
+      console.log(err.sqlMessage);
+      req.flash('error', err.sqlMessage);
+      // redirect to user page
+      return res.sendStatus(400);
+    } else {
+      // set flash message
+      //req.flash('success', 'Записът е успешно изтрит!');
+      // redirect to user page
+      return res.sendStatus(200);
+    }
+  })
+});
+app.post("/editClient", (req, res) => {
+  const { bulstat_edit, name_edit, address_edit, id_edit, email_edit,phone_edit,
+    last_paid_edit,fak_period_edit } = req.body;
+ 
+  db.query('Update clients SET ? where id=' + id_edit, { bulstat: bulstat_edit, name: name_edit, address: address_edit, email: email_edit, phone: phone_edit, factura_period: fak_period_edit, factura_date:last_paid_edit }, (error, result) => {
+    if (error) {
+      // set flash message
+      req.flash('error', error.sqlMessage);
+      // redirect to user page
+      return res.redirect('/clients');
+    } else {
+      // set flash message
+      req.flash('success', 'Записът е успешно променен!');
+      // redirect to user page
+      return res.redirect('/clients');
+    }
+  });
+});
 app.get('/objects', checkLogin, (req, res, next) => {
   const query = "Select objects.*, name from objects join clients on objects.client_id= clients.id;";
   db.query(query, (err, result) => {
@@ -1491,7 +1565,7 @@ app.post('/sendMail', async (req, res) => {
     })
     .then((res) => {
       console.log('res.originalMessage', res.originalMessage);
-      db.query('update debt set fak_status =3 where debt_id= ?;', [debt_id], (error, result) => {
+      db.query('update debt set fak_status = 3 where debt_id= ?;', [debt_id], (error, result) => {
         if (error) {
           return res.sendStatus(400);
         } else {

@@ -23,15 +23,44 @@
     <link rel='stylesheet' href='https://cdn.datatables.net/select/2.0.3/css/select.dataTables.css'>
 
     <script type="text/javascript" src="/test.js"></script>
+
+    <script type="text/javascript" src="/popups.js"></script>
     <link rel="stylesheet" href="/style.css" type="text/css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/css/bootstrap-select.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/bootstrap-select.min.js"></script>
     <style>
+        .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
+            width: 100%;
+        }
+
+        .btn:not(:disabled):not(.disabled) {
+            height: auto;
+        }
+
+        .bootstrap-select .dropdown-toggle .filter-option-inner-inner {
+            white-space: initial;
+        }
+
+        th>select {
+            word-wrap: normal;
+            width: 100% !important;
+        }
+
         .disabled {
             opacity: 0.3;
             cursor: not-allowed !important;
+        }
+
+        .bootstrap-select .dropdown-menu {
+            max-width: -webkit-fill-available;
         }
     </style>
 
@@ -61,13 +90,15 @@
                 <form method="post" action="/addObject">
                     <div class="modal-header">
                         <h4 class="modal-title">Добавяне на обект</h4>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        </div>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    </div>
                     <div class="modal-body">
                         <div class="user-details">
                             <div class="input-box">
                                 <span class="details">Клиент</span>
-                                <select class="type_select" id="client_id" name="client_id">
+                                <select class="selectpicker" id="client_id" name="client_id" title="Изберете клиент"
+                                    data-live-search="true" style=" width: 100%;">
                                     {{#each clients}}
                                     <option value="{{this.id}}">{{this.name}}</option>
                                     {{/each}}
@@ -115,7 +146,7 @@
                         <div class="user-details">
                             <div class="input-box">
                                 <span class="details">Клиент</span>
-                                <select class="type_select" id="client_id_edit" name="client_id_edit">
+                                <select class="type_select" id="client_id_edit" name="client_id_edit" disabled>
                                     {{#each clients}}
                                     <option value="{{this.id}}">{{this.name}}</option>
                                     {{/each}}
@@ -123,8 +154,8 @@
                             </div>
                             <div class="input-box">
                                 <label>ID на обект</label>
-                                <input type="text" id="object_id_edit" name="object_id_edit" placeholder="Въведете ID на обект"
-                                    readonly>
+                                <input type="text" id="object_id_edit" name="object_id_edit"
+                                    placeholder="Въведете ID на обект" readonly>
                             </div>
                             <div class="input-box">
                                 <label>Адрес на обект</label>
@@ -138,8 +169,8 @@
                             </div>
                             <div class="input-box" style='flex-basis: 100%;'>
                                 <label>Лица за контакт и допълнителни коментари</label>
-                                <textarea rows="2" id="info_edit" name="info_edit" placeholder="Въведете допълнителна информация"
-                                    required></textarea>
+                                <textarea rows="2" id="info_edit" name="info_edit"
+                                    placeholder="Въведете допълнителна информация" required></textarea>
                             </div>
                         </div>
                     </div>
@@ -153,6 +184,7 @@
     </div>
 
     <script>
+        $('.selectpicker').selectpicker("refresh");
         const tooltipTriggerList = document.querySelectorAll('[data-toggle="tooltip"]');
         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 

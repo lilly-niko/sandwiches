@@ -8,191 +8,184 @@
             <th class="name truncate">Телефон</th>
             <th></th>
             <th></th>
+            <th></th>
+            <th></th>
         </tr>
 
     </thead>
     <tbody>
-       {{#each data}}
+        {{#each data}}
         <tr id="{{this.id}}">
             <td class="td-data">{{this.name}} </td>
             <td class="td-data">{{this.bulstat}}</td>
             <td class="td-data">{{this.address}}</td>
-             <td class="td-data">{{this.email}}</td>
-              <td class="td-data">{{this.phone}}</td>
-              <td></td>
-                                    <td colspan="6">
-										    <div class="cards" style="
-    display: grid;
-    width: 100%;
-    grid-gap: 5%;
-    grid-template-columns: 1fr 1fr;
-    overflow-y: scroll;">
-											<div class="user_card" style=" grid-column: span 2;">
-										    <div class="h5">
-										        Обекти
-										    </div>
-							<div id= "insertData_{{this.id}}"></div>
-											</div>
-											
-										</div>
-										
-									</td>
+            <td class="td-data">{{this.email}}</td>
+            <td class="td-data">{{this.phone}}</td>
+            <td></td>
+            <td>{{this.mol}}</td>
+            <td>{{this.factura_period}}</td>
+            <td>{{this.factura_date}}</td>
         </tr>
         {{/each}}
     </tbody>
 </table>
 
 
-    <script>
-        $(document).ready(function () {
-            		function format(d) {
+<script>
+    $(document).ready(function () {
 
-			return '<table cellpadding="7" cellspacing="0" border="0"  style="width:100%">' +
-				'<tr>' +
-				'<td>' + d[6] + '</td>' +
-				'</tr>' +
-				'</table>';
-		}
-   
-            var table = $('#certifTable').on( 'draw.dt', function () {
-      let n = 0;
-    $(".number").each(function () {
-            $(this).html(++n);
-        })
+        var table = $('#certifTable').on('draw.dt', function () {
+            let n = 0;
+            $(".number").each(function () {
+                $(this).html(++n);
+            })
         }).DataTable({
-                'columnDefs': [
-                    { className: 'dt-left', targets: '_all' },{ type: 'string', targets: [1,2,3,4,0], 'orderable': true },	{ "visible": false, "targets": 6 },{
-					"className": 'dt-control',
-					"orderable": false,
-					"data": null,
-					"defaultContent": '',
-					"width": '30px',
-					"targets": 5
-				}],
-                'order': [
-        [1, 'asc']],
-                "pageLength": 50,
-                'language': {
-                    "lengthMenu": "Покажи _MENU_ записа на страница",
-                    "emptyTable":     "Няма налични записи",
-            "zeroRecords": "Няма налични записи за избрания критерий ",
-            "info": "Показана страница _PAGE_ от _PAGES_",
-            "infoEmpty": "Показани 0 до 0 от 0 записа",
-            "infoFiltered": "(филтрирани от общо _MAX_  записа)",
-            "search":         "Търсене:",
-                    //customize pagination prev and next buttons: use arrows instead of words
-                    'paginate': {
-                        'previous': '<i class="ri-arrow-left-s-line"></i>',
-                        'next': '<i class="ri-arrow-right-s-line"></i>'
-                    },
-                    'select': {
-            'rows': {
-                _: 'Избрани %d реда',
-                1: 'Избран 1 ред'
-            }
-        }
+            'columnDefs': [
+                { className: 'dt-left', targets: '_all' }, { type: 'string', targets: [1, 2, 3, 4, 0], 'orderable': true }, { "visible": false, "targets": [6,7,8] }, {
+                    "orderable": false,
+                    "data": null,
+                    "defaultContent": ` <td>
+                <ul class="utilities list-inline">
+                    <li><button class="edit" style="background: none !important; outline: none;" aria-hidden="true"
+                            data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Редактирай"><i
+                                class="ri-edit-line"></i></button>
+                    </li>
+
+                    <li style="padding-left: 10px;">
+                            <button class="delete" 
+                                style="background: none !important;color:red; outline: none;" id="delete"
+                                aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                data-bs-title="Изтрий"><i class="ri-delete-bin-6-line"></i>
+
+                            </button>
+                    </li>
+                <li><button class='expand' style="background: none !important; outline: none;" aria-hidden="true"
+                            data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Повече информация"><i class="ri-more-fill"></i></button>
+                    </li>
+                </ul>
+            </td>`,
+                    "width": '30px',
+                    "targets": 5
+                }],
+            'fixedHeader': {
+                header: true,
+                headerOffset: 60
+            },
+            'order': [
+                [1, 'asc']],
+            "pageLength": 50,
+            'language': {
+                "lengthMenu": "Покажи _MENU_ записа на страница",
+                "emptyTable": "Няма налични записи",
+                "zeroRecords": "Няма налични записи за избрания критерий ",
+                "info": "Показана страница _PAGE_ от _PAGES_",
+                "infoEmpty": "Показани 0 до 0 от 0 записа",
+                "infoFiltered": "(филтрирани от общо _MAX_  записа)",
+                "search": "Търсене:",
+                //customize pagination prev and next buttons: use arrows instead of words
+                'paginate': {
+                    'previous': '<i class="ri-arrow-left-s-line"></i>',
+                    'next': '<i class="ri-arrow-right-s-line"></i>'
                 },
-                 'layout': {
-        'topStart': {
-            'buttons': [
-                {
-                    text: 'Добави запис',
-                    action: function (e, dt, node, config) {
-                        console.log(e);
-                        console.log(dt);
-                        console.log(node);
-                        $('#addTaskModal').modal("show");
-                        //alert('Button activated');
+                'select': {
+                    'rows': {
+                        _: 'Избрани %d реда',
+                        1: 'Избран 1 ред'
                     }
-                },
-                {
-      text: 'Редактирай',
-      extend: 'selected',
-      action: function(e, dt, node, config) {
-           var id= dt.rows( { selected: true } ).data()[0].DT_RowId;
-                var eik= dt.rows({ selected: true }).data()[0][1];
-               var name= dt.rows({ selected: true }).data()[0][2];
-               var address= dt.rows({ selected: true }).data()[0][3];
-                var email= dt.rows({ selected: true }).data()[0][4];
-                var phone= dt.rows({ selected: true }).data()[0][5];
-                var mol= dt.rows({ selected: true }).data()[0][6];
-               
-                 document.getElementById("id_edit").value=id;
-                 document.getElementById("name_edit").value=name;
-                 document.getElementById("bulstat_edit").value=eik;
-                 document.getElementById("address_edit").value=address;
-                 document.getElementById("email_edit").value=email;
-                 document.getElementById("phone_edit").value=phone;
-                 document.getElementById("mol_edit").value=mol;
-                
-    if(!eik){
-        document.getElementById("bulstat_edit").readOnly = true;
-        document.getElementById("bulstat_edit").removeAttribute("required");
-        document.getElementById("mol_edit").readOnly = true;
-        document.getElementById("mol_edit").removeAttribute("required");
-    }
-         $('#editContragentsModal').modal("show");
-      }
                 }
-               /* {
-      text: 'Изтрий',
-      extend: 'selected',
-      action: function(e, dt, node, config) {
-          var id= dt.rows({ selected: true }).data()[0][0];
-          if (!confirm('Сигурни ли сте че искате да изтриете избрания запис?')) {
-            e.preventDefault();
-        }
-        $.post(`/deleteContragents/${id}`, (data, status) => {
-  this.html(data);
-});
-    }
-            
-        }*/
-        ]
-        }
-    },
-    'select': true
-            });
-
-        	table.on('click', 'td.dt-control', function (e) {
-			let tr = e.target.closest('tr');
-			let row = table.row(tr);
-			console.log(tr.id);
-			if (row.child.isShown()) {
-				// This row is already open - close it
-				row.child.hide();
-			}
-			else {
-				// Open this row
-				var id= tr.id;
-				row.child(format(row.data())).show();
-				let table = '<br><table class="table table-bordered">';
-				table += '<tr><td>Обект</td><td>Адрес</td></tr>';
-
-				var contr_info = document.getElementById("insertData_"+id);
-			/*	console.log(contr_info);
-				
-				wedges.forEach((element) => {
-					if (element.recipe_id == id) {
-
-						table += `<tr><td>${element.name}</td>`;
-
-						table += `<td>${element.quantity}</td></tr>`;
-					}
-				});*/
-				table += '</table>';
-				console.log(table);
-
-				contr_info.insertAdjacentHTML("beforebegin", table);
-				
-
-
-			}
-	});
-           
-
+            },
         });
-        
+
+        table.on('click', 'button.expand', function (e) {
+            let tr = e.target.closest('tr');
+            let row = table.row(tr);
+            console.log(tr.id);
+        });
+
+        $('#certifTable tbody').on('click', 'button.delete', function (e) {
+            var id = table.row($(this).parents('tr')).data().DT_RowId;
+            let element = $(this);
+            swal({
+                title: '',
+                text: 'Сигурни ли сте, че искате да изтриете избрания запис?',
+                type: 'warning',
+                showCancelButton: true,
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Отказ',
+                confirmButtonText: 'Да',
+                closeOnConfirm: false
+            }, function (isConfirm) {
+                if (isConfirm) {
+console.log(isConfirm);
+                    $.post(`/deleteClient/${id}`, (data, status) => {
+                        //this.html(data);
+                        console.log(status);
+                        let message = (status === 'success') ? 'Записът е успешно изтрит!' : 'Неуспешно изтриване!';
+                        showSwal(status, 'Записът е успешно изтрит!');
+                        if (status === 'success') {
+                            element.tooltip('hide');
+                            table
+                                .row(element.parents('tr'))
+                                .remove()
+                                .draw();
+                        }
+                    })
+
+                }
+else{
+            e.preventDefault();}            
+            })
+            // var data = table.row($(this).parents('tr')).data();
+
+            //console.log(data);
+            //newData = ["ted", "London", "23"] //Array, data here must match structure of table data
+            //cTable.row(someId).data(newData).draw();
             
-    </script>
-   
+        });
+
+        $('#certifTable tbody').on('click', 'button.edit', function () {
+            var data = table.row($(this).parents('tr')).data();
+            var id = data.DT_RowId;
+            var eik = data[1];
+            var name = data[0];
+            var address = data[2];
+            var email = data[3];
+            var phone = data[4];
+            var mol = data[6];
+            var period = data[7];
+            var last_month = data[8];
+
+            document.getElementById("id_edit").value = id;
+            document.getElementById("name_edit").value = name;
+            document.getElementById("bulstat_edit").value = eik;
+            document.getElementById("address_edit").value = address;
+            document.getElementById("email_edit").value = email;
+            document.getElementById("phone_edit").value = phone;
+            document.getElementById("mol_edit").value = mol;
+            document.getElementById("fak_period_edit").value = period;
+            document.getElementById("last_paid_edit").value = last_month;
+            let type = 2;
+
+            if (!eik) {
+                type = 1;
+                document.getElementById("bulstat_edit").readOnly = true;
+                document.getElementById("bulstat_edit").removeAttribute("required");
+                document.getElementById("mol_edit").readOnly = true;
+                document.getElementById("mol_edit").removeAttribute("required");
+            }
+            var dd = document.getElementById('type_edit');
+            for (var i = 0; i < dd.options.length; i++) {
+                if (dd.options[i].text === type) {
+                    dd.selectedIndex = i;
+                    break;
+                }
+            }
+
+            $('#editClientModal').modal("show");
+        });
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+    });
+
+
+</script>

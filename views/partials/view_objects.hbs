@@ -6,6 +6,7 @@
             <th class="name truncate">Адрес</th>
             <th class="name truncate">Тарифа</th>
             <th class="name truncate">Допълнителна информация</th>
+            <th></th>
         </tr>
 
     </thead>
@@ -17,6 +18,7 @@
             <td class="td-data">{{this.address}}</td>
             <td class="td-data">{{this.tax}}</td>
             <td class="td-data">{{this.info}}</td>
+            <td></td>
         </tr>
         {{/each}}
     </tbody>
@@ -26,11 +28,34 @@
 <script>
     $(document).ready(function () {
 
-        var table_c = $('#certifTable').DataTable({
+        var table = $('#certifTable').DataTable({
             'columnDefs': [
                 { className: 'dt-center', targets: '_all' }, { type: 'string', targets: [1, 2, 3, 4], 'orderable': true }, {
                     'targets': 0,
                     'width': '5%'
+                },
+                {
+                    "orderable": false,
+                    "data": null,
+                    "defaultContent": ` <td>
+                <ul class="utilities list-inline">
+                    <li><button class="edit" style="background: none !important; outline: none;" aria-hidden="true"
+                            data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Редактирай"><i
+                                class="ri-edit-line"></i></button>
+                    </li>
+
+                    <li style="padding-left: 10px;">
+                            <button class="delete" 
+                                style="background: none !important;color:red; outline: none;" id="delete"
+                                aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                data-bs-title="Изтрий"><i class="ri-delete-bin-6-line"></i>
+
+                            </button>
+                    </li>
+                </ul>
+            </td>`,
+                    "width": '30px',
+                    "targets": 5
                 }],
             'order': [
                 [0, 'asc']],
@@ -64,18 +89,66 @@
                                 $('#addTaskModal').modal('show');
 
                             }
-                        },
-                        {
-                            text: 'Редактирай',
-                            extend: 'selected',
-                            action: function (e, dt, node, config) {
-                                var id = dt.rows({ selected: true }).data()[0].DT_RowId;
-                                var client_name = dt.rows({ selected: true }).data()[0][1];
-                                var address = dt.rows({ selected: true }).data()[0][2];
-                                var tax = dt.rows({ selected: true }).data()[0][3];
-                                var info = dt.rows({ selected: true }).data()[0][4];
+                        }
+                    ]
+                }
+            },
+            'select': false
 
-                                var dd = document.getElementById('client_id_edit');
+        })
+
+
+        $('#certifTable tbody').on('click', 'button.delete', function (e) {
+            var id = table.row($(this).parents('tr')).data().DT_RowId;
+            let element = $(this);
+            swal({
+                title: '',
+                text: 'Сигурни ли сте, че искате да изтриете избрания запис?',
+                type: 'warning',
+                showCancelButton: true,
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Отказ',
+                confirmButtonText: 'Да',
+                closeOnConfirm: false
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    console.log(isConfirm);
+                    $.post(`/deleteObject/${id}`, (data, status) => {
+                        //this.html(data);
+                        console.log(status);
+                        let message = (status === 'success') ? 'Записът е успешно изтрит!' : 'Неуспешно изтриване!';
+                        showSwal(status, 'Записът е успешно изтрит!');
+                        if (status === 'success') {
+                            element.tooltip('hide');
+                            table
+                                .row(element.parents('tr'))
+                                .remove()
+                                .draw();
+                        }
+                    })
+
+                }
+                else {
+                    e.preventDefault();
+                }
+            })
+            // var data = table.row($(this).parents('tr')).data();
+
+            //console.log(data);
+            //newData = ["ted", "London", "23"] //Array, data here must match structure of table data
+            //cTable.row(someId).data(newData).draw();
+
+        });
+
+        $('#certifTable tbody').on('click', 'button.edit', function () {
+            var data = table.row($(this).parents('tr')).data();
+            var id = data.DT_RowId;
+            var client_name = data[1];
+            var address = data[2];
+            var tax = data[3];
+            var info = data[4];
+
+             var dd = document.getElementById('client_id_edit');
                                 for (var i = 0; i < dd.options.length; i++) {
                                     if (dd.options[i].text === client_name) {
                                         dd.selectedIndex = i;
@@ -89,28 +162,9 @@
                                 document.getElementById("info_edit").value = info;
 
                                 $('#editObjectsModal').modal("show");
-                            }
-                        },
-                        {
-                            text: 'Изтрий',
-                            extend: 'selected',
-                            action: function (e, dt, node, config) {
-                                var id = dt.rows({ selected: true }).data()[0][0];
-                                if (!confirm('Сигурни ли сте че искате да изтриете избрания запис?')) {
-                                    e.preventDefault();
-                                }
-                                $.post(`/deleteObjectss/${id}`, (data, status) => {
-                                    this.html(data);
-                                });
-                            }
-                        }
-                    ]
-                }
-            },
-            'select': true
-
-        })
-
+        });
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 
     });
 

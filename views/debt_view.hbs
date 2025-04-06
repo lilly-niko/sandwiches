@@ -101,12 +101,8 @@
                     'className': 'dt-body-center',
                     'width': "20px"
                 },
-                {
-                    'targets': [4],
-                    'className': 'dt-body-center'
-                },
                  {
-                    'targets': [1, 2, 3],
+                    'targets': [1, 2, 3,4],
                     'className': 'dt-center'
                 }
                 ],
@@ -151,9 +147,9 @@
                         var isSelected = (checkboxesSelected.length == rowNodes.length);
 
                         rows.nodes().each(function (r) {
-                            r.style.display = 'none';
+                            r.style.display = '';
                             if (collapsed) {
-                                r.style.display = '';
+                                r.style.display = 'none';
                             }
                         });
                         var debtSum = rows
